@@ -1,0 +1,1149 @@
+================================================
+FILE: S2_07052025/Ex2_1.m
+================================================
+% Read and Display an image with different quality
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image; %load image package in Octave
+
+Img = imread('nature.jpg'); % color img
+Img_grayscale = rgb2gray(Img); %gray scale img
+Img_bw = im2double(im2bw(Img_grayscale, 0.5)); %binary
+
+%  display image in different quality
+FS = 15; % fontsize of caption
+figure, clf;
+subplot(1, 3, 1), imshow(Img), title('Original Image', "fontsize", FS); %row, column, vi tri
+subplot(1, 3, 2), imshow(Img_grayscale), title('Grayscale Image', "fontsize", FS);
+subplot(1, 3, 3), imshow(Img_bw), title('Binary Image', "fontsize", FS);
+saveas(gcf, 'Image in different type.jpg');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%save the origin color image in different quality
+imwrite(Img, 'nature100.jpg'); % save as default
+imwrite(Img, 'nature75.jpg'); % save as 75% of the origin
+imwrite(Img, 'nature10.jpg'); % save as 10% of the origin
+
+
+
+================================================
+FILE: S2_07052025/Ex2_2.m
+================================================
+% Digitalzation: Sampling and Qiantization
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image; %load image package in Octave
+
+%Load test image
+Img = double(imread('tiger.jpg'));
+
+%díplay the original image with different number of bits
+FS = 15;
+for NumOfBit = 1 : 8
+  %quantize image to a given number of bit(s)
+  NumOfLevel = 2 .^ NumOfBit; %number of levels
+  LevelGap = 256 / NumOfLevel; %different between two adjacent levels
+  quantized_Img = uint8(ceil(Img / LevelGap) * LevelGap - 1);
+
+  %display image
+  subplot(2, 4, NumOfBit);
+  imshow(quantized_Img);
+
+  %image caption
+  if (1 == NumOfBit)
+    name = [num2str(NumOfBit) '-bit'];
+  else
+    name = [num2str(NumOfBit) '-bits'];
+  endif
+  title(name, "fontsize", FS);
+
+  %save image
+  imwrite(quantized_Img, ['Quantization_in_' name '.jpg']);
+end
+
+
+
+================================================
+FILE: S2_07052025/Ex2_3.m
+================================================
+% Brightness Adjusment
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Load test image
+Img = im2double(imread('rose.jpg'));
+
+%brightness ajusment by an intensity scalling
+
+scale = 0.5; %scale = 1:unchange, > 1: brigher
+scale_Img = Img .* scale;
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 2, 1), imshow(Img, [0, 1]), title('Original Image', "fontsize", FS);
+subplot(1, 2, 2), imshow(scale_Img, [0, 1]), title('Brighter Image', "fontsize", FS);
+
+saveas(gcf, 'rose_darker.jpg');
+
+
+
+================================================
+FILE: S2_07052025/Ex2_4.m
+================================================
+% Contrast enhancement
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Load test image
+Img = im2double(imread('waterfall.jpg'));
+
+%contrast enhancement by changing a 'gamma' characteristic
+gamma = 1.9; % =1: no change; >1 increase contrast; <1 decrease contrast
+enhancement_Img = Img .^ gamma;
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 2, 1), imshow(Img, [0, 1]), title('Original Image', "fontsize", FS);
+subplot(1, 2, 2), imshow(enhancement_Img, [0, 1]), title('Contrast Image', "fontsize", FS);
+
+saveas(gcf, 'waterfall_contrast.jpg');
+
+
+
+================================================
+FILE: S2_07052025/Ex2_5.m
+================================================
+% Adding 2 image
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image; %load image package in Octave
+
+%Load test image
+Ia = imread('prarie.jpg');
+Ib = imread('giraffe.jpg');
+
+% Resize I
+Ib1 = imresize(Ib, [size(Ia,1), size(Ia,2)]);
+
+Ic = imadd(Ia, Ib1);
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 3, 1), imshow(Ia), title('prarie Image', "fontsize", FS);
+subplot(1, 3, 2), imshow(Ib), title('giraffe Image', "fontsize", FS);
+subplot(1, 3, 3), imshow(Ic), title('prarie giraffe Image', "fontsize", FS);
+
+saveas(gcf, 'prarie_giraffe.jpg');
+
+
+
+================================================
+FILE: S2_07052025/Ex2_6.m
+================================================
+% Subtracting two image
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image; %load image package in Octave
+
+%Load test image
+live = im2double(imread('live.jpg'));
+mask = im2double(imread('mask.jpg'));
+
+dif_Img = imsubtract(live, mask) .^ 0.5;
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 3, 1), imshow(live, [0, 1]), title('Live Image', "fontsize", FS);
+subplot(1, 3, 2), imshow(mask, [0, 1]), title('Mask Image', "fontsize", FS);
+subplot(1, 3, 3), imshow(dif_Img, [0, 1]), title('Different Image', "fontsize", FS);
+
+saveas(gcf, 'live_mask.jpg');
+
+
+
+
+================================================
+FILE: S2_07052025/Ex2_7.m
+================================================
+% multiplying two or more image
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image; %load image package in Octave
+
+%Load test image
+I1 = im2double(imread('earth1.jpg'));
+I2 = im2double(imread('earth2.jpg'));
+I = immultiply(immultiply(immultiply(I1, I2), I1), I2);
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 2, 1), imshow(I1, [0, 1]), title('earth 2D Image', "fontsize", FS);
+subplot(1, 2, 2), imshow(I, [0, 1]), title('earth 3D Image', "fontsize", FS);
+
+saveas(gcf, 'earth_multiply.jpg');
+
+
+
+
+================================================
+FILE: S3_12052025/Ex3_1.m
+================================================
+% Dividing two imgs
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+% load test imgs
+notext = imread('gradient.jpg');
+withtext = imread('gradient_with_text.jpg');
+
+D = imdivide(double(withtext), double(notext));
+D = D > 1;
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 3, 1), imshow(notext), title('No text', "fontsize", FS);
+subplot(1, 3, 2), imshow(withtext), title('with text', "fontsize", FS);
+subplot(1, 3, 3), imshow(D), title('Text', "fontsize", FS);
+
+saveas(gcf, 'imdivide_text.jpg');
+
+
+
+
+================================================
+FILE: S3_12052025/Ex3_2.m
+================================================
+% Flipping, Rotating images
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+% a. Flipping
+img = imread('atrium.jpg');
+img_ud = flipud(img); %up to down
+img_lr = fliplr(img); %left to right
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 3, 1), imshow(img), title('Org Img', "fontsize", FS);
+subplot(1, 3, 2), imshow(img_ud), title('Img Up Down', "fontsize", FS);
+subplot(1, 3, 3), imshow(img_lr), title('Img Left Right', "fontsize", FS);
+
+saveas(gcf, 'img_flipping.jpg');
+
+
+
+
+================================================
+FILE: S3_12052025/Ex3_2_1.m
+================================================
+% Rotating images
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+% a. Flipping
+img = imread('eight.png');
+
+theta = 90;
+img_rot = imrotate(img, theta);
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 2, 1), imshow(img), title('Org Img', "fontsize", FS);
+subplot(1, 2, 2), imshow(img_rot), title('Img Rotate', "fontsize", FS);
+
+saveas(gcf, 'img rotate.jpg');
+
+
+
+
+================================================
+FILE: S3_12052025/Ex3_3.m
+================================================
+% Croping, zooming images
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+img = imread('mandrill.tif');
+
+x1 = 150; x2 = 450; y1 = 100; y2 = 500;
+width = x2 - x1;
+height = y2 - y1;
+xmin = x1; ymin = y1;
+img_crop = imcrop(img, [xmin ymin, width, height]);
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 2, 1), imshow(img), title('Origin Img', "fontsize", FS);
+subplot(1, 2, 2), imshow(img_crop), title('Croping Img', "fontsize", FS);
+
+saveas(gcf, 'img crop.jpg');
+
+
+
+
+
+================================================
+FILE: S3_12052025/Ex3_3_1.m
+================================================
+% zooming images with interpolation methods
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+img = imread('bird.jpg');
+
+img_z1 = imresize(img, 2); %by default, bicubuc
+img_z2 = imresize(img, 3, 'nearest');
+img_z3 = imresize(img, 4, 'bilinear');
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 4, 1), imshow(img), title('Origin Img', "fontsize", FS);
+subplot(1, 4, 2), imshow(img_z1), title('Zooming Img 1', "fontsize", FS);
+subplot(1, 4, 3), imshow(img_z2), title('Zooming Img 2', "fontsize", FS);
+subplot(1, 4, 4), imshow(img_z3), title('Zooming Img 3', "fontsize", FS);
+
+saveas(gcf, 'img zoom.jpg');
+
+
+
+
+
+================================================
+FILE: S3_12052025/Ex3_4.m
+================================================
+% Gray level tranformation
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+img = imread('lion.jpg');
+
+% identity
+x = uint8(0 : 255);
+plot(x, 'LineWidth', 1.5);
+xlim([0 255])
+ylim([0 255])
+grid on;
+img1 = x(img + 1);
+
+%perform the identity transfromation
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 2, 1), imshow(img), title('Origin Img', "fontsize", FS);
+subplot(1, 2, 2), imshow(img1), title('Img Identity', "fontsize", FS);
+
+saveas(gcf, 'img identity.jpg');
+
+% negative
+
+x = uint8(255 : -1 : 0);
+plot(x, 'LineWidth', 1.5);
+xlim([0 255])
+ylim([0 255])
+grid on;
+
+img2 = x(img + 1);
+
+%perform the identity transfromation
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 2, 1), imshow(img), title('Origin Img', "fontsize", FS);
+subplot(1, 2, 2), imshow(img2), title('Img Identity', "fontsize", FS);
+
+saveas(gcf, 'img negative.jpg');
+
+
+
+
+
+
+
+
+================================================
+FILE: S3_12052025/Ex3_5.m
+================================================
+% Gray level tranformation
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+img = imread('lion.jpg');
+
+% logarithmic
+x = uint8(0 : 255);
+c = 255 / log(256); % brighter
+c = 155 / log(256); % darker
+y = c * log(x + 1);
+plot(y, 'LineWidth', 1.5);
+xlim([0 255])
+ylim([0 255])
+grid on;
+img1 = uint8(y(img + 1));
+
+%perform the logarithmic transfromation
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 2, 1), imshow(img), title('Origin Img', "fontsize", FS);
+subplot(1, 2, 2), imshow(img1), title('Img Logarithmic', "fontsize", FS);
+
+saveas(gcf, 'img logarithmic.jpg');
+
+
+
+================================================
+FILE: S3_12052025/Ex3_5_1.m
+================================================
+% Piece-wise Linear Tranformation
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+img = imread('lion.jpg');
+
+% Piece-wise Linear
+LUT(1 : 101) = 2 * (0 : 100) + 10;
+LUT(102 : 201) = 175;
+LUT(202 : 256) = 0.85 * (201 : 255) - 12;
+plot(LUT, 'LineWidth', 1.5);
+xlim([0 255]);
+ylim([0 255]);
+grid on;
+
+%perform the Piece-wise Linear Tranformation
+img2 = intlut(img, uint8(LUT));
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 2, 1), imshow(img), title('Origin Img', "fontsize", FS);
+subplot(1, 2, 2), imshow(img2), title('Img Piece-wise Linear', "fontsize", FS);
+
+saveas(gcf, 'Piece-wise Linear Tranformation.jpg');
+
+
+
+================================================
+FILE: S3_12052025/Ex3_6.m
+================================================
+% noise reduction
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+% load test img
+img = im2double(imread('quadnight.jfif'));
+% load color img then convert to gray scale then convert to double
+
+%repeat over different number of sample images
+nImg = [1 2 8 16 64 128 256 512];
+FS = 15
+for i = 1 : numel(nImg)
+  N = nImg(i); %number of img to calculate the average
+  avg_img = zeros(size(img));
+
+  % add Gaussian noise, accumulate each image to the total image
+  for j = 1 : N
+    noisy_img = imnoise(img, 'gaussian', 0, 0.5);
+    avg_img = avg_img + noisy_img;
+  end
+
+  % calculate the average image and show it
+  avg_img = avg_img / N;
+  subplot(2, numel(nImg) / 2, i);
+  imshow(avg_img), title([num2str(N), 'image(s)'], "fontsize", FS);
+
+  imwrite(avg_img, ['Image Averaging_', num2str(N), 'avg.jpeg']);
+
+end
+
+
+
+================================================
+FILE: S3_12052025/mandrill.tif
+================================================
+[Non-text file]
+
+
+================================================
+FILE: S3_12052025/quadnight.jfif
+================================================
+[Non-text file]
+
+
+================================================
+FILE: S4_14052025/Ex4_1.m
+================================================
+% histogram
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+img = imread('bay.jpg');
+
+[count, bins] = imhist(img)
+
+FS = 15;
+
+%plot histogram
+figure, clf;
+subplot(1,2,1), imshow(img), title('Origin image', "fontsize", FS);
+subplot(1, 2, 2), bar(bins, count);
+set(gca, "fontsize", FS);
+xlim([0 255]); ylim([0 max(count(:))+500]);
+xlabel('Gray level'); ylabel('# of pixel');
+
+saveas(gcf, 'Histogram.jpg');
+
+
+
+================================================
+FILE: S4_14052025/Ex4_2.m
+================================================
+% global histogram
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+FS = 15;
+img = imread('moon.jpg');
+
+[count, bins] = imhist(img)
+
+%plot histogram
+figure, clf;
+subplot(1,2,1), imshow(img), title('Origin image', "fontsize", FS);
+
+subplot(1, 2, 2), bar(bins, count);
+set(gca, "fontsize", FS); grid on;
+xlim([0 255]); ylim([0 max(count(:))+500]);
+xlabel('Gray level'); ylabel('# of pixel');
+title("Histogram before equalization", "fontsize", FS);
+saveas(1, 'Before Equalizaiton Global Histogram.jpg');
+
+eq_img = histeq(img);
+[count, bins] = imhist(eq_img)
+bins = bins * 255;
+figure, clf;
+subplot(1,2,1), imshow(eq_img), title('Equalizaiton image', "fontsize", FS);
+
+subplot(1, 2, 2), bar(bins, count);
+set(gca, "fontsize", FS); grid on;
+xlim([0 255]); ylim([0 max(count(:))+500]);
+xlabel('Gray level'); ylabel('# of pixel');
+title("Histogram after equalization", "fontsize", FS);
+
+saveas(2, 'After Equalizaiton Global Histogram.jpg');
+
+
+
+================================================
+FILE: S4_14052025/Ex4_3.m
+================================================
+% Contrast limited adaptive hítogram equalization
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+FS = 15;
+img = imread('moon.jpg');
+
+%plot histogram
+[count, bins] = imhist(img)
+maxCount = max(count(:));
+
+%loop over different clipping ratio
+clipRatio = [1 0.7 0.4 0.1]; % = 1 => no clipping, 0.7 => clipping 70%
+limited_img = cell(1, numel(clipRatio));
+LUT = uint8(zeros(numel(clipRatio), 256));
+for i = 1 : numel(clipRatio)
+  % clip histogram
+  clip = clipRatio(i) * maxCount;
+  clippedCount = (count < clip) .* count + (count >= clip) * clip;
+
+  % construc one-dimensuonal virtual image for histeq to get mapping function
+  clipped_img = [];
+  for level = 0 : 255
+    clipped_img = cat(2, clipped_img, level * ones(1, clippedCount(level + 1)));
+  end
+  [temp, T] = histeq_modified(uint8(clipped_img));
+
+  % apply mapping function
+  LUT(i,:) = uint8(T * 255);
+  limited_img(i) = intlut(img, LUT(i,:));
+end
+
+% show img
+figure(1), clf;
+
+for i = 1 : numel(clipRatio)
+  subplot(1, numel(clipRatio) ,i), imshow(limited_img{i});
+  title(['clip at ', num2str(clipRatio(i)), ' max'], "fontsize", FS);
+end
+
+saveas(1, 'CLAHE.jpg');
+
+figure(2), clf;
+set(gcf, 'Position', [100 100 600 300]);
+subplot(1, 2, 1), bar(bins, count), axis([0 255 0 max(count(:))+500]);
+set(gca, "fontsize", FS); grid on;
+subplot(1, 2, 2), plot(LUT(1:4,:)', "LineWidth", 1.5); axis([0 255 0 255]);
+set(gca, "fontsize", FS); set(gcf, "Color", "White");
+
+
+
+
+
+================================================
+FILE: S4_14052025/Ex4_4.m
+================================================
+% local hítogram equalization
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+FS = 15;
+img = rgb2gray(imread('newspaper.jpg'));
+
+eq_img = histeq(img);
+
+lc_img = blockproc(img, [294 98], @histeq);
+
+
+FS = 15;
+
+%plot histogram
+figure, clf;
+subplot(1,3,1), imshow(img), title('Origin image', "fontsize", FS);
+subplot(1,3,2), imshow(eq_img), title('Global Equal.', "fontsize", FS);
+subplot(1,3,3), imshow(lc_img), title('Local Equal.', "fontsize", FS);
+
+% show histogram
+
+saveas(gcf, 'Local Histogram.jpg');
+
+
+
+
+
+================================================
+FILE: S4_14052025/histeq_modified.m
+================================================
+function [out,T] = histeq_modified(a,cm,hgram)
+%HISTEQ Enhance contrast using histogram equalization.
+%   HISTEQ enhances the contrast of images by transforming the values in an
+%   intensity image, or the values in the colormap of an indexed image, so
+%   that the histogram of the output image approximately matches a specified
+%   histogram.
+%
+%   J = HISTEQ(I,HGRAM) transforms the intensity image I so that the histogram
+%   of the output image J with length(HGRAM) bins approximately matches HGRAM.
+%   The vector HGRAM should contain integer counts for equally spaced bins
+%   with intensity values in the appropriate range: [0,1] for images of class
+%   double or single, [0,255] for images of class uint8, [0,65535] for images
+%   of class uint16, and [-32768, 32767] for images of class int16. HISTEQ
+%   automatically scales HGRAM so that sum(HGRAM) = NUMEL(I). The histogram of
+%   J will better match HGRAM when length(HGRAM) is much smaller than the
+%   number of discrete levels in I.
+%
+%   J = HISTEQ(I,N) transforms the intensity image I, returning in J an
+%   intensity image with N discrete levels. A roughly equal number of pixels
+%   is mapped to each of the N levels in J, so that the histogram of J is
+%   approximately flat. (The histogram of J is flatter when N is much smaller
+%   than the number of discrete levels in I.) The default value for N is 64.
+%
+%   [J,T] = HISTEQ(I) returns the gray scale transformation that maps gray
+%   levels in the intensity image I to gray levels in J.
+%
+%   NEWMAP = HISTEQ(X,MAP,HGRAM) transforms the colormap associated with the
+%   indexed image X so that the histogram of the gray component of the indexed
+%   image (X,NEWMAP) approximately matches HGRAM. HISTEQ returns the
+%   transformed colormap in NEWMAP. length(HGRAM) must be the same as
+%   size(MAP,1).
+%
+%   NEWMAP = HISTEQ(X,MAP) transforms the values in the colormap so that the
+%   histogram of the gray component of the indexed image X is approximately
+%   flat. It returns the transformed colormap in NEWMAP.
+%
+%   [NEWMAP,T] = HISTEQ(X,...) returns the gray scale transformation T that
+%   maps the gray component of MAP to the gray component of NEWMAP.
+%
+%   Class Support
+%   -------------
+%   For syntaxes that include an intensity image I as input, I can be uint8,
+%   uint16, int16, double or single. The output image J has the same class as
+%   I.
+%
+%   For syntaxes that include an indexed image X as input, X can be uint8,
+%   double, or single. The output colormap is always double.  Also, the
+%   optional output T (the gray level transform) is always of class double.
+%
+%   Note
+%   ----
+%   I and X can be N-dimensional images.
+%
+%   Example 1
+%   ---------
+%   % Enhance the contrast of an intensity image using histogram
+%   % equalization.
+%
+%       I = imread('tire.tif');
+%       J = histeq(I);
+%
+%       % Display the original and enhanced images
+%       figure
+%       subplot(1,2,1)
+%       imshow(I)
+%       subplot(1,2,2)
+%       imshow(J)
+%
+%   Example 2
+%   ---------
+%   % Enhance the contrast of a volumetric image using histogram
+%   % equalization.
+%
+%       load mristack
+%       enhanced = histeq(mristack);
+%
+%       % Display the first slice of data
+%       figure
+%       subplot(1,2,1)
+%       imshow(mristack(:,:,1))
+%       subplot(1,2,2)
+%       imshow(enhanced(:,:,1))
+%
+%   See also ADAPTHISTEQ, BRIGHTEN, IMADJUST, IMHIST, IMHISTMATCH.
+
+%   Copyright 1993-2020 The MathWorks, Inc.
+
+% NPTS  - Number of Points
+% n     - Num buckets in: size(cm,1) or NPTS
+% hgram - Histogram to match, flat by default (Argument 'HGRAM')
+% m     - Num of output buckets (Argument 'N')
+% a     - Input image (intensity or colormap) (Argument 'I' or 'X')
+% cm    - Colormap
+% out   - Output image (Argument 'J')
+% map   - New colormap returned (Argument 'NEWMAP')
+% nn    - Bincounts from imhist of input
+% cum   - Cumulative bincounts of input
+% cumd  - Cumulative bincounts of desired histogram
+
+% Parameter setup
+isIntensityImage = false;
+if(isfloat(a))
+    NPTS = 256;
+else
+    NPTS = diff(getrangefromclass(a)) + 1;
+end
+if nargin == 1
+    %HISTEQ(I)
+    validateattributes(a,{'uint8','uint16','double','int16','single'}, ...
+        {'nonsparse'}, mfilename,'I',1);
+    n = 64; % Default n
+    hgram = ones(1,n)*(numel(a)/n);
+    isIntensityImage = true;
+elseif nargin == 2
+    if numel(cm) == 1
+        %HISTEQ(I,N)
+        validateattributes(a,{'uint8','uint16','double','int16','single'}, ...
+            {'nonsparse'}, mfilename,'I',1);
+        validateattributes(cm, {'single','double'},...
+            {'nonsparse','integer','real','positive','scalar'},...
+            mfilename,'N',2);
+        m = cm;
+        hgram = ones(1,m)*(numel(a)/m);
+        isIntensityImage = true;
+    elseif size(cm,2) == 3 && size(cm,1) > 1
+        %HISTEQ(X,map)
+        if isa(a, 'uint16')
+            error(message('images:histeq:unsupportedUint16IndexedImages'))
+        end
+        validateattributes(a,{'uint8','double','single'}, ...
+            {'nonsparse'},mfilename,'X',1);
+        n = size(cm,1);
+        hgram = ones(1,n)*(numel(a)/n);
+    else
+        %HISTEQ(I,HGRAM)
+        validateattributes(a,{'uint8','uint16','double','int16','single'}, ...
+            {'nonsparse'}, mfilename,'I',1);
+        validateattributes(cm, {'single','double'},...
+            {'real','nonsparse','vector','nonempty'},...
+            mfilename,'HGRAM',2);
+        hgram = cm;
+        isIntensityImage = true;
+    end
+else
+    %HISTEQ(X,MAP,HGRAM)
+    validateattributes(a,{'uint8','double','uint16','single'}, ...
+        {'nonsparse'},mfilename,'X',1);
+    if isa(a, 'uint16')
+        error(message('images:histeq:unsupportedUint16IndexedImages'))
+    end
+    validateattributes(hgram, {'single','double'},...
+            {'real','nonsparse','vector','nonempty'},...
+            mfilename,'HGRAM',3);
+
+    n = size(cm,1);
+    if length(hgram)~=n
+        error(message('images:histeq:HGRAMmustBeSameSizeAsMAP'))
+    end
+end
+
+if min(size(hgram)) > 1
+   error(message('images:histeq:hgramMustBeAVector'))
+end
+
+% Normalize hgram
+hgram = hgram*(numel(a)/sum(hgram));       % Set sum = numel(a)
+m = length(hgram);
+
+% Intensity image or indexed image
+if isIntensityImage
+    classChanged = false;
+    if isa(a,'int16')
+        classChanged = true;
+        a = im2uint16(a);
+    end
+
+    [nn,cum] = computeCumulativeHistogram(a,NPTS);
+    T = createTransformationToIntensityImage(a,hgram,m,NPTS,nn,cum);
+    % Mex call is equivalent to:
+     b = uint8((255.0*T(a+1)));
+    % or uint16((65535.0*T(a+1)));
+    %b = images.internal.builtins.grayxform(a, T);
+
+    if nargout == 0
+        if ismatrix(b)
+            imshow(b);
+            return;
+        else
+            out = a;
+            return;
+        end
+    elseif classChanged
+        out = im2int16(b);
+    else
+        out = b;
+    end
+
+else
+    I = ind2gray(a,cm);
+    [nn,cum] = computeCumulativeHistogram(I,n);
+    T = createTransformationToIntensityImage(a,hgram,m,n,nn,cum);
+
+    % Modify colormap by extending the (r,g,b) vectors.
+    % Compute equivalent colormap luminance
+    ntsc = rgb2ntsc(cm);
+
+    % Map to new luminance using T, store in 2nd column of ntsc.
+    ntsc(:,2) = T(floor(ntsc(:,1)*(n-1))+1)';
+
+    % Scale (r,g,b) vectors by relative luminance change
+    map = cm.*((ntsc(:,2)./max(ntsc(:,1),eps))*ones(1,3));
+
+    % Clip the (r,g,b) vectors to the unit color cube
+    map = map ./ (max(max(map,[],2),1) *ones(1,3));
+
+    if nargout == 0
+        if ismatrix(a)
+            imshow(a,map);
+            return;
+        else
+            out = a;
+            return;
+        end
+    else
+        out = map;
+    end
+end
+
+
+function [nn,cum] = computeCumulativeHistogram(img,nbins)
+
+nn = imhist(img,nbins)';
+cum = cumsum(nn);
+
+
+function T = createTransformationToIntensityImage(a,hgram,m,n,nn,cum)
+% Create transformation to an intensity image by minimizing the error
+% between desired and actual cumulative histogram.
+
+% Generate cumulative hgram
+cumd = cumsum(hgram);
+
+% Calc error
+% tol = nn w/ 1st and last element set to 0, then divide by 2 and tile to MxN
+tol = ones(m,1)*min([nn(1:n-1),0;0,nn(2:n)])/2;
+% Calculate errors btw cumulative histograms
+err = (cumd(:)*ones(1,n)-ones(m,1)*cum(:)')+tol;
+
+% Find which combo yielded errors above tolerance
+d = find(err < -numel(a)*sqrt(eps));
+if ~isempty(d)
+    % Set to max err
+   err(d) = numel(a)*ones(size(d));
+end
+
+% Get min error
+% T will be the bin mapping of a to hgram
+% T(oldbinval) = newbinval
+[dum,T] = min(err); %#ok
+% Normalize T
+T = (T-1)/(m-1);
+
+
+
+
+
+================================================
+FILE: S4_14052025/tree.jfif
+================================================
+[Non-text file]
+
+
+================================================
+FILE: S5_19052025/coins.tif
+================================================
+[Non-text file]
+
+
+================================================
+FILE: S5_19052025/Ex5_1.m
+================================================
+% Convolution between an image and a simple filter
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%img = im2double(imread('airplane.png'));
+img = im2double(imread('bike.png'));
+
+
+%construct three diffferent simple filter
+h1 = ones(1, 10) / 10; %orizontal filter
+h2 = ones(10, 1) / 10; % vertical filter
+h3 = ones(10, 10) / 100; % box/windows filter
+
+%perfrom convolving on the image
+filter_img1 = imfilter(img, h1, 'symmetric');
+filter_img2 = imfilter(img, h2, 'replicate');
+filter_img3 = imfilter(img, h2, 'circular');
+
+
+%show image
+FS = 15;
+figure(1), clf;
+
+subplot(1,2,1), imshow(img), title('Origin image', "fontsize", FS);
+subplot(1,2,2), imshow(filter_img1), title('Horizontal Image.', "fontsize", FS);
+saveas(1, 'Horizontal filtering.jpg');
+
+figure(2), clf;
+subplot(1,2,1), imshow(img), title('Origin image.', "fontsize", FS);
+subplot(1,2,2), imshow(filter_img2), title('Vertical Image.', "fontsize", FS);
+saveas(2, 'vertial filtering.jpg');
+
+figure(3), clf;
+subplot(1,2,1), imshow(img), title('Origin image.', "fontsize", FS);
+subplot(1,2,2), imshow(filter_img3), title('box Image.', "fontsize", FS);
+saveas(3, 'box filtering.jpg');
+
+
+
+================================================
+FILE: S5_19052025/Ex5_2.m
+================================================
+% Subsampling an image
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+img = im2double(imread('bike.png'));
+
+% perform subsampling by a matrix multiplication
+[row,col] = size(img);
+a = eye(row / 2);
+b = [1;0];
+c = [0.5;0.5];
+h1 = kron(a, b);
+h2 = kron(a, c);
+
+%perfrom convolving on the image
+sub_img1 = h1' * img * h1;
+sub_img2 = h2' * img * h2;
+
+%show image
+FS = 15;
+figure(1), clf;
+
+subplot(1,3,1), imshow(img), title('Origin image', "fontsize", FS);
+subplot(1,3,2), imshow(sub_img1), title('Method 1', "fontsize", FS);
+subplot(1,3,3), imshow(sub_img2), title('Method 2', "fontsize", FS);
+saveas(1, 'Subsampling filtering.jpg');
+
+
+
+================================================
+FILE: S5_19052025/Ex5_3.m
+================================================
+% noise mean filtering
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+img = imread('coins.tif');
+
+img_noise = imnoise(img, "Gaussian", 0, 0.05);
+
+%show image
+FS = 15;
+figure(1), clf;
+
+subplot(1,2,1), imshow(img), title('Origin image', "fontsize", FS);
+subplot(1,2,2), imshow(img_noise), title('Noise filter image', "fontsize", FS);
+saveas(1, 'Noise filter image.jpg');
+
+% apply an averaing filter using two different kernel sizes
+%a. default kernel 3x3
+f1 = fspecial('average');
+img_noise1 = imfilter(img_noise, f1);
+
+%b. default kernel 5x5
+f2 = fspecial('average', [5 5]);
+img_noise2 = imfilter(img_noise, f2);
+
+%show image
+FS = 15;
+figure(2), clf;
+
+subplot(1,2,1), imshow(img_noise1), title('Image noise 3x3', "fontsize", FS);
+subplot(1,2,2), imshow(img_noise2), title('Image noise 5x5', "fontsize", FS);
+saveas(2, 'Noise filter image with different kernel size.jpg');
+
+
+
+
+
+
+
+================================================
+FILE: S5_19052025/Ex5_4.m
+================================================
+%Ex5_5 Noise Low-Pass Filter (LPF)
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+Img = imread('airplane.png');
+
+%construct three different filters
+[wx, wy] = meshgrid(-pi : pi/8 : pi, -pi : pi/8 : pi);
+
+%compute frequency responses
+%type = '1d_horizontal';
+%type = '1d_vertical';
+type = '2d';
+
+if strcmp(type, '2d') == 1
+  %filter frequency-domain
+  H = (1/256) * (1 + 2*cos(wx) + 2*cos(2*wx)) .* (1 + 2*cos(wy) + 2*cos(2*wy));
+  h = (1/256) * ones(16); %spatial-domain
+elseif strcmp(type, '1d_horizontal') == 1
+  H = (1/16) * (1 + 2*cos(wx) + 2*cos(2*wx));
+  h = (1/16) * ones(1,16); %row-vector
+elseif strcmp(type, '1d_vertical') == 1
+  H = (1/16) * (1 + 2*cos(wy) + 2*cos(2*wy));
+  h = (1/16) * ones(16,1); %column-vector
+end
+
+%plot three filters
+FS = 15; %fontsize of caption
+figure(1), clf;
+surf(wx/pi, wy/pi, abs(H)); axis([-1 1 -1 1 0 1]);
+set(gca, 'XTick', -1 : 0.5 : 1, 'YTick', -1 : 0.5 : 1);
+xlabel('\omega_x / \pi'); ylabel('\omega_y / \pi');
+zlabel('H|(\omega_x, \omega_y|');
+saveas(1, 'Frequency Responses of Three Filters.jpg');
+
+%apply to filter noisy image
+Filtered_Img = imfilter(Img, h, 'symmetric');
+figure(2), clf;
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(Filtered_Img), title('Filtered Image', "fontsize", FS);
+saveas(2, 'Original vs. Filtered Images.jpg');
+
+
+
+================================================
+FILE: S5_19052025/Ex5_5.m
+================================================
+% Noise low pass filter (LPF)
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+img = imread('airplane.png');
+
+%contruct three different filters
+[wx, wy] = meshgrid(-pi : p/8 : pi : -pi : p/8 : pi);
+
+%compute frequency responses
+type = '1d_horizontal';
+%type = '1d_vertical';
+%type = '2d';
+
+if strcmp(type, '2d') == 1
+  %filter frequency domain
+  a = (1/256) * (1 + 2*cos(wx) + 2*cos(2*wx)) .* (1 + 2 cos(wx) + 2*cos(2*wx));
+  b = (1/256) * ones(16);
+
+else if strcmp(type, '1d_horizontal') == 1
+  a = (1/16) * (1 + 2*cos(wx) + 2*cos(2*wx));
+  b = (1/16) * ones(1, 16);
+
+  elseif strcmp(type, '1d_vertical') == 1
+  a = (1/16) * (1 + 2*cos(wx) + 2*cos(2*wx));
+  b = (1/16) * ones(16, 1);
+
+end
+
+figure(1), clf;
+surf(wx/pi, wy/pi, abs(H)); axis([-1 1 -1 1 0 1]);
+set (gca 'XTick', -1 : 0.5 : 1, 'YTick', -1 : 0.5 : 1);
+xlabel('\omega_x / \pi'); ylabel('\omega_y / \pi');
+zlabel('H|');
+
+%show image
+FS = 15;
+figure(1), clf;
+
+subplot(1,3,1), imshow(img), title('Original Image', "fontsize", FS);
+subplot(1,3,2), imshow(img_salt), title('Salt Image', "fontsize", FS);
+subplot(1,3,3), imshow(img_pepper), title('Pepper Image', "fontsize", FS);
+saveas(1, 'Noise low pass filter (LPF).jpg');
+
+
+
+
+
+
+
+================================================
+FILE: S5_19052025/tire.tif
+================================================
+[Non-text file]
+
