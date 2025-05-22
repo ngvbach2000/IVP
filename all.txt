@@ -1,4 +1,11 @@
 ================================================
+FILE: README.md
+================================================
+# IVP
+
+
+
+================================================
 FILE: S2_07052025/Ex2_1.m
 ================================================
 % Read and Display an image with different quality
@@ -483,18 +490,6 @@ end
 
 
 ================================================
-FILE: S3_12052025/mandrill.tif
-================================================
-[Non-text file]
-
-
-================================================
-FILE: S3_12052025/quadnight.jfif
-================================================
-[Non-text file]
-
-
-================================================
 FILE: S4_14052025/Ex4_1.m
 ================================================
 % histogram
@@ -915,18 +910,6 @@ T = (T-1)/(m-1);
 
 
 ================================================
-FILE: S4_14052025/tree.jfif
-================================================
-[Non-text file]
-
-
-================================================
-FILE: S5_19052025/coins.tif
-================================================
-[Non-text file]
-
-
-================================================
 FILE: S5_19052025/Ex5_1.m
 ================================================
 % Convolution between an image and a simple filter
@@ -1143,8 +1126,79 @@ saveas(1, 'Noise low pass filter (LPF).jpg');
 
 
 ================================================
-FILE: S5_19052025/tire.tif
+FILE: S6_21052025/Ex6_1.m
 ================================================
-[Non-text file]
+% Image Sharpening
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%img = im2double(imread('duck.png'));
+img = im2double(imread('street.jfif'));
+
+%apply two sharpening filters 3x3 to the degraded image
+h1 = [0 -1 0; -1 10 -1; 0 -1 0] / 5;
+h2 = [0 -1 0; -1 5 -1; 0 -1 0];
+
+img_sharpened1 = imfilter(img, h1, "symmetric");
+img_sharpened2 = imfilter(img, h2, "replicate");
+
+%plot image
+FS = 15
+figure, clf;
+
+subplot(1, 3, 1), imshow(img), title('Origin Img', "fontsize", FS);
+subplot(1, 3, 2), imshow(img_sharpened1), title('Sharpening 1', "fontsize", FS);
+subplot(1, 3, 3), imshow(img_sharpened2), title('Sharpening 2', "fontsize", FS);
+
+saveas(gcf, "Sharpening Image");
+
+
+
+
+================================================
+FILE: S6_21052025/Ex6_2.m
+================================================
+%Ex6_2a Butterworth Noise Reduction and Deblurring
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+pkg load signal;
+%load test image
+Img = im2double(imread('eagle.jfif'));
+
+%add blurry effect
+LEN = 3; THETA = 5;
+PSF = fspecial('motion', LEN, THETA);
+blurred_Img = imfilter(Img, PSF, 'conv', 'symmetric');
+
+%add noise effect
+noise_mean = 0; noise_var = 0.05;
+noisy_blurred_Img = imnoise(blurred_Img, 'gaussian', noise_mean, noise_var);
+
+%plot images
+FS = 15; %fontsize of caption
+figure(1), clf;
+subplot(1,3,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,3,2), imshow(blurred_Img), title('Blurry Image', "fontsize", FS);
+subplot(1,3,3), imshow(noisy_blurred_Img), title('Noisy Blurry Image', "fontsize", FS);
+saveas(1, 'Noisy Blurry Image.jpg');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%compare Mean Square Error (mse) between the noisy blurry image and original image
+mse1 = 255 * (noisy_blurred_Img - Img);
+fprintf("Mean Square Error before restoration: %.2f\n", rms(mse1(:)));
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%denoise and deblur (sharpen)
+h = butter(5, 0.4);
+filtered_Img = imfilter(noisy_blurred_Img, h, 'replicate');
+
+figure(2), clf;
+subplot(1,2,1), imshow(noisy_blurred_Img), title('Noisy Blurry Image', "fontsize", FS);
+subplot(1,2,2), imshow(filtered_Img), title('Denoise Deblurring Image', "fontsize", FS);
+saveas(2, 'Denoise Deblurring Image using Butterworth.jpg');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%compare Mean Square Error (mse) between the denoise deblur image and original image
+mse2 = 255 * (filtered_Img - Img);
+fprintf("Mean Square Error after restoration: %.2f\n", rms(mse2(:)));
 
 
