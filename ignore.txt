@@ -1,0 +1,1 @@
+*.zip, *.txt, mid_test/, *.jfif, *.tif, *.ofig
