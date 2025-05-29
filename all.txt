@@ -4,56 +4,53 @@ FILE: README.md
 # IVP
 
 
-
 ================================================
-FILE: S2_07052025/Ex2_1.m
+FILE: S2/Ex2_1.m
 ================================================
-% Read and Display an image with different quality
+%Ex2_1 Read and display an image with different types and quality
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image; %load image package in Octave
 
-Img = imread('nature.jpg'); % color img
-Img_grayscale = rgb2gray(Img); %gray scale img
-Img_bw = im2double(im2bw(Img_grayscale, 0.5)); %binary
+Img = imread('nature.jpg'); %color image
+Img_grayscale = rgb2gray(Img); %grayscale image
+Img_bw = im2double(im2bw(Img_grayscale, 0.5));
 
-%  display image in different quality
-FS = 15; % fontsize of caption
+%display image in different quality
+FS = 15; %fontsize of caption
 figure, clf;
-subplot(1, 3, 1), imshow(Img), title('Original Image', "fontsize", FS); %row, column, vi tri
-subplot(1, 3, 2), imshow(Img_grayscale), title('Grayscale Image', "fontsize", FS);
-subplot(1, 3, 3), imshow(Img_bw), title('Binary Image', "fontsize", FS);
-saveas(gcf, 'Image in different type.jpg');
+subplot(1,3,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,3,2), imshow(Img_grayscale), title('Grayscale Image', "fontsize", FS);
+subplot(1,3,3), imshow(Img_bw), title('Binary Image', "fontsize", FS);
+saveas(gcf, 'Image in Different Types.jpg');
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %save the origin color image in different quality
-imwrite(Img, 'nature100.jpg'); % save as default
-imwrite(Img, 'nature75.jpg'); % save as 75% of the origin
-imwrite(Img, 'nature10.jpg'); % save as 10% of the origin
+imwrite(Img, 'nature100.jpg'); %save as default
+imwrite(Img, 'nature75.jpg', 'quality', 75); %save as 75% of the origin
+imwrite(Img, 'nature10.jpg', 'quality', 10); %save as 10% of the origin
 
 
 
 ================================================
-FILE: S2_07052025/Ex2_2.m
+FILE: S2/Ex2_2.m
 ================================================
-% Digitalzation: Sampling and Qiantization
+%Ex2_2 Digitization: Sampling and Quantization
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-pkg load image; %load image package in Octave
-
-%Load test image
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%load test image
 Img = double(imread('tiger.jpg'));
 
-%díplay the original image with different number of bits
-FS = 15;
+%display the original image with different number of bits
+FS = 15; %fontsize of caption
 for NumOfBit = 1 : 8
   %quantize image to a given number of bit(s)
   NumOfLevel = 2 .^ NumOfBit; %number of levels
-  LevelGap = 256 / NumOfLevel; %different between two adjacent levels
+  LevelGap = 256 / NumOfLevel; %difference between two adjacent levels
   quantized_Img = uint8(ceil(Img / LevelGap) * LevelGap - 1);
 
   %display image
-  subplot(2, 4, NumOfBit);
+  subplot(2,4,NumOfBit);
   imshow(quantized_Img);
 
   %image caption
@@ -71,577 +68,465 @@ end
 
 
 ================================================
-FILE: S2_07052025/Ex2_3.m
+FILE: S2/Ex2_3.m
 ================================================
-% Brightness Adjusment
+%Ex2_3 Brightness Adjustment
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Load test image
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%load test image
 Img = im2double(imread('rose.jpg'));
 
-%brightness ajusment by an intensity scalling
-
-scale = 0.5; %scale = 1:unchange, > 1: brigher
-scale_Img = Img .* scale;
+%brightness adjustment by an intensity scaling
+scale = 0.75; %scale=1: unchanged; scale>1: brighter; scale<1: darker
+scaled_Img = Img .* scale;
 
 %plot image
-FS = 15
+FS = 15; %fontsize of caption
 figure, clf;
+subplot(1,2,1), imshow(Img, [0 1]), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(scaled_Img, [0 1]), title('Darker Image', "fontsize", FS);
 
-subplot(1, 2, 1), imshow(Img, [0, 1]), title('Original Image', "fontsize", FS);
-subplot(1, 2, 2), imshow(scale_Img, [0, 1]), title('Brighter Image', "fontsize", FS);
-
-saveas(gcf, 'rose_darker.jpg');
+%save image
+saveas(gcf, 'Darker.jpg');
 
 
 
 ================================================
-FILE: S2_07052025/Ex2_4.m
+FILE: S2/Ex2_4.m
 ================================================
-% Contrast enhancement
+%Ex2_4 Contrast Enhancement
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Load test image
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%load test image
 Img = im2double(imread('waterfall.jpg'));
 
 %contrast enhancement by changing a 'gamma' characteristic
-gamma = 1.9; % =1: no change; >1 increase contrast; <1 decrease contrast
-enhancement_Img = Img .^ gamma;
+gamma = 0.2; %gamma=1: unchanged; gamma>1: increase; gamma<1: decrease
+enhanced_Img = Img .^ gamma;
 
 %plot image
-FS = 15
+FS = 15; %fontsize of caption
 figure, clf;
+subplot(1,2,1), imshow(Img, [0 1]), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(enhanced_Img, [0 1]), title('Decrease Contrast', "fontsize", FS);
 
-subplot(1, 2, 1), imshow(Img, [0, 1]), title('Original Image', "fontsize", FS);
-subplot(1, 2, 2), imshow(enhancement_Img, [0, 1]), title('Contrast Image', "fontsize", FS);
-
-saveas(gcf, 'waterfall_contrast.jpg');
+%save image
+saveas(gcf, 'Decrease.png');
 
 
 
 ================================================
-FILE: S2_07052025/Ex2_5.m
+FILE: S2/Ex2_5.m
 ================================================
-% Adding 2 image
+%Ex2_5 Adding two images
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-pkg load image; %load image package in Octave
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
 
-%Load test image
+%load test images
 Ia = imread('prarie.jpg');
 Ib = imread('giraffe.jpg');
+Ib1 = imresize(Ib, [size(Ia,1) size(Ia,2)]);
+Ic = imadd(Ia,Ib1);
 
-% Resize I
-Ib1 = imresize(Ib, [size(Ia,1), size(Ia,2)]);
-
-Ic = imadd(Ia, Ib1);
-
-%plot image
-FS = 15
+%plot images
+FS = 15; %fontsize of caption
 figure, clf;
+subplot(1,3,1), imshow(Ia), title('prarie', "fontsize", FS);
+subplot(1,3,2), imshow(Ib), title('giraffe', "fontsize", FS);
+subplot(1,3,3), imshow(Ic), title('Combination Image', "fontsize", FS);
 
-subplot(1, 3, 1), imshow(Ia), title('prarie Image', "fontsize", FS);
-subplot(1, 3, 2), imshow(Ib), title('giraffe Image', "fontsize", FS);
-subplot(1, 3, 3), imshow(Ic), title('prarie giraffe Image', "fontsize", FS);
-
-saveas(gcf, 'prarie_giraffe.jpg');
+%save image
+saveas(gcf, 'Addition Image.jpg');
 
 
 
 ================================================
-FILE: S2_07052025/Ex2_6.m
+FILE: S2/Ex2_6.m
 ================================================
-% Subtracting two image
+%Ex2_6 Multiplying two or more images
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-pkg load image; %load image package in Octave
-
-%Load test image
-live = im2double(imread('live.jpg'));
-mask = im2double(imread('mask.jpg'));
-
-dif_Img = imsubtract(live, mask) .^ 0.5;
-
-%plot image
-FS = 15
-figure, clf;
-
-subplot(1, 3, 1), imshow(live, [0, 1]), title('Live Image', "fontsize", FS);
-subplot(1, 3, 2), imshow(mask, [0, 1]), title('Mask Image', "fontsize", FS);
-subplot(1, 3, 3), imshow(dif_Img, [0, 1]), title('Different Image', "fontsize", FS);
-
-saveas(gcf, 'live_mask.jpg');
-
-
-
-
-================================================
-FILE: S2_07052025/Ex2_7.m
-================================================
-% multiplying two or more image
-clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-pkg load image; %load image package in Octave
-
-%Load test image
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
 I1 = im2double(imread('earth1.jpg'));
 I2 = im2double(imread('earth2.jpg'));
-I = immultiply(immultiply(immultiply(I1, I2), I1), I2);
+I = immultiply(immultiply(immultiply(I1,I2),I1),I2);
 
-%plot image
-FS = 15
+%plot images
+FS = 15; %fontsize of caption
 figure, clf;
+subplot(1,2,1), imshow(I1), title('2-D Image', "fontsize", FS);
+subplot(1,2,2), imshow(I), title('3-D Image', "fontsize", FS);
 
-subplot(1, 2, 1), imshow(I1, [0, 1]), title('earth 2D Image', "fontsize", FS);
-subplot(1, 2, 2), imshow(I, [0, 1]), title('earth 3D Image', "fontsize", FS);
-
-saveas(gcf, 'earth_multiply.jpg');
-
+%save image
+saveas(gcf, '3-D Effect.png');
 
 
 
 ================================================
-FILE: S3_12052025/Ex3_1.m
+FILE: S2/Ex2_7.m
 ================================================
-% Dividing two imgs
+%Ex2_7 Subtracting two images
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image;
-% load test imgs
-notext = imread('gradient.jpg');
-withtext = imread('gradient_with_text.jpg');
+
+%load test images
+live = im2double(imread('live.jpg'));
+mask = im2double(imread('mask.jpg'));
+diff_Img = imabsdiff(live,mask) .^ 0.4;
+
+%plot images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(1,3,1), imshow(live, [0 1]), title('live', "fontsize", FS);
+subplot(1,3,2), imshow(mask, [0 1]), title('mask', "fontsize", FS);
+subplot(1,3,3), imshow(diff_Img, [0 1]), title('Subtraction Image', "fontsize", FS);
+
+%save image
+saveas(gcf, 'Subtraction Image.jpg');
+
+
+
+================================================
+FILE: S3/Ex3_1.m
+================================================
+%Ex3_1 Dividing two images
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test images
+notext = imread('gradient.jpg'); %load unsigned integer 8-bit (0-255)
+withtext = imread('gradient_with_text.jpg'); %load unsigned integer 8-bit (0-255)
 
 D = imdivide(double(withtext), double(notext));
 D = D > 1;
 
-%plot image
-FS = 15
+%plot images
+FS = 15; %fontsize of caption
 figure, clf;
+subplot(1,3,1), imshow(notext), title('Without text', "fontsize", FS);
+subplot(1,3,2), imshow(withtext), title('With text', "fontsize", FS);
+subplot(1,3,3), imshow(D), title('Detected text', "fontsize", FS);
 
-subplot(1, 3, 1), imshow(notext), title('No text', "fontsize", FS);
-subplot(1, 3, 2), imshow(withtext), title('with text', "fontsize", FS);
-subplot(1, 3, 3), imshow(D), title('Text', "fontsize", FS);
-
-saveas(gcf, 'imdivide_text.jpg');
-
+%save image
+saveas(gcf, 'Detected Text.jpg');
 
 
 
 ================================================
-FILE: S3_12052025/Ex3_2.m
+FILE: S3/Ex3_2.m
 ================================================
-% Flipping, Rotating images
+%Ex3_2 Flipping and Rotating images
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image;
-% a. Flipping
-img = imread('atrium.jpg');
-img_ud = flipud(img); %up to down
-img_lr = fliplr(img); %left to right
+FS = 15; %fontsize of caption
 
-%plot image
-FS = 15
-figure, clf;
+%a. Flipping an image up-down and left-right
+%Img = imread('atrium.jpg');
+%Img_ud = flipud(Img); %flip up to down
+%Img_lr = fliplr(Img); %flip left to right
 
-subplot(1, 3, 1), imshow(img), title('Org Img', "fontsize", FS);
-subplot(1, 3, 2), imshow(img_ud), title('Img Up Down', "fontsize", FS);
-subplot(1, 3, 3), imshow(img_lr), title('Img Left Right', "fontsize", FS);
+%figure(1), clf;
+%subplot(1,3,1), imshow(Img), title('Original Image', "fontsize", FS);
+%subplot(1,3,2), imshow(Img_ud), title('Flipped Up-Down Image', "fontsize", FS);
+%subplot(1,3,3), imshow(Img_lr), title('Flipped Left-Right Image', "fontsize", FS);
 
-saveas(gcf, 'img_flipping.jpg');
-
-
-
-
-================================================
-FILE: S3_12052025/Ex3_2_1.m
-================================================
-% Rotating images
-clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-pkg load image;
-% a. Flipping
-img = imread('eight.png');
+%save image
+%saveas(1, 'Flipping Image.png');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%b. Rotating an image with an angle theta in degree
+Img = imread('eight.png');
 
 theta = 90;
-img_rot = imrotate(img, theta);
+Img_rot = imrotate(Img, theta);
 
-%plot image
-FS = 15
-figure, clf;
+figure(2), clf;
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(Img_rot), title('Rotated Image', "fontsize", FS);
 
-subplot(1, 2, 1), imshow(img), title('Org Img', "fontsize", FS);
-subplot(1, 2, 2), imshow(img_rot), title('Img Rotate', "fontsize", FS);
-
-saveas(gcf, 'img rotate.jpg');
-
+%save image
+saveas(2, 'Rotating Image.png');
 
 
 
 ================================================
-FILE: S3_12052025/Ex3_3.m
+FILE: S3/Ex3_3.m
 ================================================
-% Croping, zooming images
+%Ex3_3 Cropping and Zooming an image
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image;
-img = imread('mandrill.tif');
+FS = 15; %fontsize of caption
 
-x1 = 150; x2 = 450; y1 = 100; y2 = 500;
-width = x2 - x1;
-height = y2 - y1;
-xmin = x1; ymin = y1;
-img_crop = imcrop(img, [xmin ymin, width, height]);
+%a. Cropping an image
+%Img = imread('mandrill.tif');
 
-%plot image
-FS = 15
-figure, clf;
+%x1 = 150; x2 = 450; y1 = 100; y2 = 500;
+%xmin = x1; ymin = y1; width = x2 - x1; height = y2 - y1;
+%Img_cropped = imcrop(Img, [xmin ymin width height]);
 
-subplot(1, 2, 1), imshow(img), title('Origin Img', "fontsize", FS);
-subplot(1, 2, 2), imshow(img_crop), title('Croping Img', "fontsize", FS);
+%figure(1), clf;
+%subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+%subplot(1,2,2), imshow(Img_cropped), title('Cropped Image', "fontsize", FS);
 
-saveas(gcf, 'img crop.jpg');
+%save image
+%saveas(1, 'Cropping Image.png');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%b. Zooming an image with different interpolation methods
+Img = imread('bird.jpg');
 
+Img_z1 = imresize(Img, 4); %by default, bicubic
+Img_z2 = imresize(Img, 3, 'nearest'); %zero-order
+Img_z3 = imresize(Img, 2, 'bilinear'); %first-order
 
+figure(2), clf;
+subplot(2,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(2,2,2), imshow(Img_z1), title('Bicubic', "fontsize", FS);
+subplot(2,2,3), imshow(Img_z2), title('Nearest', "fontsize", FS);
+subplot(2,2,4), imshow(Img_z3), title('Bilinear', "fontsize", FS);
+
+%save image
+saveas(2, 'Zooming with Different Interpolation Methods.png');
 
 
 
 ================================================
-FILE: S3_12052025/Ex3_3_1.m
+FILE: S3/Ex3_4.m
 ================================================
-% zooming images with interpolation methods
+%Ex3_4 Gray-Level Transformation
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-pkg load image;
-img = imread('bird.jpg');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%load test image
+Img = imread('lion.jpg');
+FS = 15; %fontsize of caption
 
-img_z1 = imresize(img, 2); %by default, bicubuc
-img_z2 = imresize(img, 3, 'nearest');
-img_z3 = imresize(img, 4, 'bilinear');
+%a. Identity Transformation
+%plot the transformation function
+%figure(1), clf;
+%x = uint8(0 : 255);
+%plot(x, 'LineWidth', 1.5); xlim([0 255]); ylim([0 255]);
+%grid on;
 
-%plot image
-FS = 15
-figure, clf;
-
-subplot(1, 4, 1), imshow(img), title('Origin Img', "fontsize", FS);
-subplot(1, 4, 2), imshow(img_z1), title('Zooming Img 1', "fontsize", FS);
-subplot(1, 4, 3), imshow(img_z2), title('Zooming Img 2', "fontsize", FS);
-subplot(1, 4, 4), imshow(img_z3), title('Zooming Img 3', "fontsize", FS);
-
-saveas(gcf, 'img zoom.jpg');
-
-
-
-
-
-================================================
-FILE: S3_12052025/Ex3_4.m
-================================================
-% Gray level tranformation
-clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-pkg load image;
-img = imread('lion.jpg');
-
-% identity
-x = uint8(0 : 255);
-plot(x, 'LineWidth', 1.5);
-xlim([0 255])
-ylim([0 255])
-grid on;
-img1 = x(img + 1);
-
-%perform the identity transfromation
-
-%plot image
-FS = 15
-figure, clf;
-
-subplot(1, 2, 1), imshow(img), title('Origin Img', "fontsize", FS);
-subplot(1, 2, 2), imshow(img1), title('Img Identity', "fontsize", FS);
-
-saveas(gcf, 'img identity.jpg');
-
-% negative
-
+%perform the identity transformation
+%Img1 = x(Img + 1);
+%figure(2), clf;
+%subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+%subplot(1,2,2), imshow(Img1), title('Identity', "fontsize", FS);
+%saveas(2, 'Identity Transformation.jpg');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%b. Negative Transformation
+%plot the transformation function
+figure(3), clf;
 x = uint8(255 : -1 : 0);
-plot(x, 'LineWidth', 1.5);
-xlim([0 255])
-ylim([0 255])
+plot(x, 'LineWidth', 1.5); xlim([0 255]); ylim([0 255]);
 grid on;
 
-img2 = x(img + 1);
-
-%perform the identity transfromation
-
-%plot image
-FS = 15
-figure, clf;
-
-subplot(1, 2, 1), imshow(img), title('Origin Img', "fontsize", FS);
-subplot(1, 2, 2), imshow(img2), title('Img Identity', "fontsize", FS);
-
-saveas(gcf, 'img negative.jpg');
-
-
-
-
-
+%perform the negative transformation
+Img2 = x(Img + 1);
+figure(4), clf;
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(Img2), title('Negative', "fontsize", FS);
+saveas(4, 'Negative Transformation.jpg');
 
 
 
 ================================================
-FILE: S3_12052025/Ex3_5.m
+FILE: S3/Ex3_5.m
 ================================================
-% Gray level tranformation
+%Ex3_5 Gray-Level Transformation
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-pkg load image;
-img = imread('lion.jpg');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%load test image
+Img = imread('lion.jpg');
+FS = 15; %fontsize of caption
 
-% logarithmic
-x = uint8(0 : 255);
-c = 255 / log(256); % brighter
-c = 155 / log(256); % darker
-y = c * log(x + 1);
-plot(y, 'LineWidth', 1.5);
-xlim([0 255])
-ylim([0 255])
-grid on;
-img1 = uint8(y(img + 1));
+%a. Logarithmic Transformation
+%plot the transformation function
+%figure(1), clf;
+%x = uint8(0 : 255);
+%c = 255 / log(256); % => brighter image
+%c = 100 / log(256); % => darker image
+%y = c * log(x + 1);
+%plot(y, 'LineWidth', 1.5); xlim([0 255]); ylim([0 255]);
+%grid on;
 
-%perform the logarithmic transfromation
-
-%plot image
-FS = 15
-figure, clf;
-
-subplot(1, 2, 1), imshow(img), title('Origin Img', "fontsize", FS);
-subplot(1, 2, 2), imshow(img1), title('Img Logarithmic', "fontsize", FS);
-
-saveas(gcf, 'img logarithmic.jpg');
-
-
-
-================================================
-FILE: S3_12052025/Ex3_5_1.m
-================================================
-% Piece-wise Linear Tranformation
-clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-pkg load image;
-img = imread('lion.jpg');
-
-% Piece-wise Linear
+%perform the logarithmic transformation
+%Img3 = uint8(y(Img + 1));
+%figure(2), clf;
+%subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+%subplot(1,2,2), imshow(Img3), title('Logarithmic', "fontsize", FS);
+%saveas(2, 'Logarithmic Transformation.jpg');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%b. Piece-wise Linear Transformation
+%plot the transformation function
+figure(1), clf;
 LUT(1 : 101) = 2 * (0 : 100) + 10;
 LUT(102 : 201) = 175;
-LUT(202 : 256) = 0.85 * (201 : 255) - 12;
-plot(LUT, 'LineWidth', 1.5);
-xlim([0 255]);
-ylim([0 255]);
+LUT(202 : 256) = 0.85 * (201 : 255) -  12;
+plot(LUT, 'LineWidth', 1.5); xlim([0 255]); ylim([0 255]);
 grid on;
 
-%perform the Piece-wise Linear Tranformation
-img2 = intlut(img, uint8(LUT));
-
-%plot image
-FS = 15
-figure, clf;
-
-subplot(1, 2, 1), imshow(img), title('Origin Img', "fontsize", FS);
-subplot(1, 2, 2), imshow(img2), title('Img Piece-wise Linear', "fontsize", FS);
-
-saveas(gcf, 'Piece-wise Linear Tranformation.jpg');
-
-
-
-================================================
-FILE: S3_12052025/Ex3_6.m
-================================================
-% noise reduction
-clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%perform piece-wise linear transformation
 pkg load image;
-% load test img
-img = im2double(imread('quadnight.jfif'));
-% load color img then convert to gray scale then convert to double
+Img4 = intlut(Img, uint8(LUT));
+figure(2), clf;
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(Img4), title('Piece-Wise Linear', "fontsize", FS);
+saveas(2, 'Piece-Wise Linear Transformation.jpg');
 
-%repeat over different number of sample images
-nImg = [1 2 8 16 64 128 256 512];
-FS = 15
-for i = 1 : numel(nImg)
-  N = nImg(i); %number of img to calculate the average
-  avg_img = zeros(size(img));
-
-  % add Gaussian noise, accumulate each image to the total image
-  for j = 1 : N
-    noisy_img = imnoise(img, 'gaussian', 0, 0.5);
-    avg_img = avg_img + noisy_img;
-  end
-
-  % calculate the average image and show it
-  avg_img = avg_img / N;
-  subplot(2, numel(nImg) / 2, i);
-  imshow(avg_img), title([num2str(N), 'image(s)'], "fontsize", FS);
-
-  imwrite(avg_img, ['Image Averaging_', num2str(N), 'avg.jpeg']);
-
-end
 
 
 
 ================================================
-FILE: S4_14052025/Ex4_1.m
+FILE: S4/Ex4_1.m
 ================================================
-% histogram
+%Ex4_1 Histogram
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image;
-img = imread('bay.jpg');
+%load test image
+%Img = imread('brain.jpg');
+Img = imread('bay.jpg');
 
-[count, bins] = imhist(img)
+[count, bins] = imhist(Img);
+FS = 15; %fontsize of caption
 
-FS = 15;
-
-%plot histogram
+%plot the histogram of the original image
 figure, clf;
-subplot(1,2,1), imshow(img), title('Origin image', "fontsize", FS);
-subplot(1, 2, 2), bar(bins, count);
-set(gca, "fontsize", FS);
-xlim([0 255]); ylim([0 max(count(:))+500]);
-xlabel('Gray level'); ylabel('# of pixel');
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,2,2), bar(bins, count);
+set(gca, "fontsize", FS); grid on;
+xlim([0 255]); ylim([0 max(count(:)+500)]);
+xlabel('Gray Level'); ylabel('# of pixels');
 
-saveas(gcf, 'Histogram.jpg');
+%save image
+saveas(gcf, 'Histogram.png');
 
 
 
 ================================================
-FILE: S4_14052025/Ex4_2.m
+FILE: S4/Ex4_2.m
 ================================================
-% global histogram
+%Ex4_2 Global Histogram Equalization
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image;
-FS = 15;
-img = imread('moon.jpg');
+%load test image
+%Img = imread('brain.jpg');
+%Img = imread('bay.jpg');
+Img = imread('moon.jpg');
 
-[count, bins] = imhist(img)
-
-%plot histogram
-figure, clf;
-subplot(1,2,1), imshow(img), title('Origin image', "fontsize", FS);
-
-subplot(1, 2, 2), bar(bins, count);
+FS = 15; %fontsize of caption
+%show image before and after histogram equalization
+figure(1), clf;
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+[count, bins] = imhist(Img);
+subplot(1,2,2), bar(bins, count);
 set(gca, "fontsize", FS); grid on;
 xlim([0 255]); ylim([0 max(count(:))+500]);
-xlabel('Gray level'); ylabel('# of pixel');
-title("Histogram before equalization", "fontsize", FS);
-saveas(1, 'Before Equalizaiton Global Histogram.jpg');
+xlabel('Gray Levels'); ylabel('# of pixels');
+title('Histogram before Equalization', "fontsize", FS);
+saveas(1, 'Before Equalization.jpg');
 
-eq_img = histeq(img);
-[count, bins] = imhist(eq_img)
-bins = bins * 255;
-figure, clf;
-subplot(1,2,1), imshow(eq_img), title('Equalizaiton image', "fontsize", FS);
-
-subplot(1, 2, 2), bar(bins, count);
+eq_Img = histeq(Img);
+figure(2), clf;
+subplot(1,2,1), imshow(eq_Img), title('Equalized Image', "fontsize", FS);
+[count, bins] = imhist(eq_Img); %return in double (0.0000 to 1.0000)
+bins *= 255;
+subplot(1,2,2), bar(bins, count);
 set(gca, "fontsize", FS); grid on;
 xlim([0 255]); ylim([0 max(count(:))+500]);
-xlabel('Gray level'); ylabel('# of pixel');
-title("Histogram after equalization", "fontsize", FS);
-
-saveas(2, 'After Equalizaiton Global Histogram.jpg');
+xlabel('Gray Levels'); ylabel('# of pixels');
+title('Histogram after Equalization', "fontsize", FS);
+saveas(2, 'After Equalization.jpg');
 
 
 
 ================================================
-FILE: S4_14052025/Ex4_3.m
+FILE: S4/Ex4_3.m
 ================================================
-% Contrast limited adaptive hítogram equalization
+%Ex4_3 Contrast Limited Adaptive Histogram Equalization (CLAHE)
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image;
-FS = 15;
-img = imread('moon.jpg');
+%load test image
+Img = imread('moon.jpg');
 
-%plot histogram
-[count, bins] = imhist(img)
+%perform image histogram and find the max count
+[count, bins] = imhist(Img);
 maxCount = max(count(:));
 
-%loop over different clipping ratio
-clipRatio = [1 0.7 0.4 0.1]; % = 1 => no clipping, 0.7 => clipping 70%
-limited_img = cell(1, numel(clipRatio));
+%loop over different ratios
+clipRatio = [1 0.7 0.4 0.05]; %ratio = 1: no clipping, ratio = 0.7: clip from 70%
+limitedEq_Img = cell(1, numel(clipRatio));
 LUT = uint8(zeros(numel(clipRatio), 256));
 for i = 1 : numel(clipRatio)
-  % clip histogram
+  %clip histogram
   clip = clipRatio(i) * maxCount;
   clippedCount = (count < clip) .* count + (count >= clip) * clip;
 
-  % construc one-dimensuonal virtual image for histeq to get mapping function
-  clipped_img = [];
+  %construct one-dimensional virtual image for histeq to get mapping function
+  clipped_Img = []; %create an empty image
   for level = 0 : 255
-    clipped_img = cat(2, clipped_img, level * ones(1, clippedCount(level + 1)));
+    clipped_Img = cat(2, clipped_Img, level * ones(1, clippedCount(level + 1)));
   end
-  [temp, T] = histeq_modified(uint8(clipped_img));
+  [temp, T] = histeq_modified(uint8(clipped_Img));
 
-  % apply mapping function
+  %apply the mapping function
   LUT(i,:) = uint8(T * 255);
-  limited_img(i) = intlut(img, LUT(i,:));
+  limitedEq_Img(i) = intlut(Img, LUT(i,:));
 end
 
-% show img
+%show images
 figure(1), clf;
-
+FS = 15; %fontsize of caption
 for i = 1 : numel(clipRatio)
-  subplot(1, numel(clipRatio) ,i), imshow(limited_img{i});
-  title(['clip at ', num2str(clipRatio(i)), ' max'], "fontsize", FS);
+  subplot(1, numel(clipRatio), i), imshow(limitedEq_Img{i});
+  title(['Clip at ' num2str(clipRatio(i)) ' max'], "fontsize", FS);
 end
+saveas(1, 'CLAHE.png');
 
-saveas(1, 'CLAHE.jpg');
-
+%show histogram
 figure(2), clf;
 set(gcf, 'Position', [100 100 600 300]);
-subplot(1, 2, 1), bar(bins, count), axis([0 255 0 max(count(:))+500]);
+subplot(1,2,1), bar(bins, count), axis([0 255 0 max(count(:))+500]);
 set(gca, "fontsize", FS); grid on;
-subplot(1, 2, 2), plot(LUT(1:4,:)', "LineWidth", 1.5); axis([0 255 0 255]);
-set(gca, "fontsize", FS); set(gcf, "Color", "White");
-
-
+subplot(1,2,2), plot(LUT(1:4,:)', 'LineWidth', 1.5); axis([0 255 0 255]);
+set(gca, "fontsize", FS); set(gcf, 'Color', 'white');
 
 
 
 ================================================
-FILE: S4_14052025/Ex4_4.m
+FILE: S4/Ex4_4.m
 ================================================
-% local hítogram equalization
+%Ex4_4 Local Histogram Equalization
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image;
-FS = 15;
-img = rgb2gray(imread('newspaper.jpg'));
+%load test image
+Img = rgb2gray(imread('newspaper.jpg'));
 
-eq_img = histeq(img);
+%perform global histogram equalization
+eq_Img = histeq(Img);
+%perform local histogram equalization
+lc_Img = blockproc(Img, [98 294], @histeq);
 
-lc_img = blockproc(img, [294 98], @histeq);
-
-
-FS = 15;
-
-%plot histogram
-figure, clf;
-subplot(1,3,1), imshow(img), title('Origin image', "fontsize", FS);
-subplot(1,3,2), imshow(eq_img), title('Global Equal.', "fontsize", FS);
-subplot(1,3,3), imshow(lc_img), title('Local Equal.', "fontsize", FS);
-
-% show histogram
-
-saveas(gcf, 'Local Histogram.jpg');
-
+%show image
+FS = 15; %fontsize of caption
+figure(1), clf;
+subplot(1,3,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,3,2), imshow(eq_Img), title('Global Equal.', "fontsize", FS);
+subplot(1,3,3), imshow(lc_Img), title('Local Equal.', "fontsize", FS);
+%show histogram before and after equalization
 
 
 
 
 ================================================
-FILE: S4_14052025/histeq_modified.m
+FILE: S4/histeq_modified.m
 ================================================
 function [out,T] = histeq_modified(a,cm,hgram)
 %HISTEQ Enhance contrast using histogram equalization.
@@ -910,123 +795,150 @@ T = (T-1)/(m-1);
 
 
 ================================================
-FILE: S5_19052025/Ex5_1.m
+FILE: S5/Ex5_1.m
 ================================================
-% Convolution between an image and a simple filter
+%Ex5_1 Convolution between an image and a simple filter
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image;
-%img = im2double(imread('airplane.png'));
-img = im2double(imread('bike.png'));
+%load test image
+%Img = im2double(imread('airplane.png'));
+Img = im2double(imread('bike.png'));
 
+%construct three different simple filters
+h1 = ones(1,10) / 10; %horizontal filter
+h2 = ones(10,1) / 10; %vertical filter
+h3 = ones(10) / 100; %box/window filter
 
-%construct three diffferent simple filter
-h1 = ones(1, 10) / 10; %orizontal filter
-h2 = ones(10, 1) / 10; % vertical filter
-h3 = ones(10, 10) / 100; % box/windows filter
+%perform convolving on the image
+filtered_Img1 = imfilter(Img, h1, 'symmetric');
+filtered_Img2 = imfilter(Img, h2, 'replicate');
+filtered_Img3 = imfilter(Img, h3, 'circular');
 
-%perfrom convolving on the image
-filter_img1 = imfilter(img, h1, 'symmetric');
-filter_img2 = imfilter(img, h2, 'replicate');
-filter_img3 = imfilter(img, h2, 'circular');
-
-
-%show image
-FS = 15;
+%show images
+FS = 15; %fontsize of caption
 figure(1), clf;
-
-subplot(1,2,1), imshow(img), title('Origin image', "fontsize", FS);
-subplot(1,2,2), imshow(filter_img1), title('Horizontal Image.', "fontsize", FS);
-saveas(1, 'Horizontal filtering.jpg');
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(filtered_Img1), title('Horizontal Filtering', "fontsize", FS);
+saveas(1, 'Horizontal Filtering.png');
 
 figure(2), clf;
-subplot(1,2,1), imshow(img), title('Origin image.', "fontsize", FS);
-subplot(1,2,2), imshow(filter_img2), title('Vertical Image.', "fontsize", FS);
-saveas(2, 'vertial filtering.jpg');
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(filtered_Img2), title('Vertical Filtering', "fontsize", FS);
+saveas(2, 'Vertical Filtering.png');
 
 figure(3), clf;
-subplot(1,2,1), imshow(img), title('Origin image.', "fontsize", FS);
-subplot(1,2,2), imshow(filter_img3), title('box Image.', "fontsize", FS);
-saveas(3, 'box filtering.jpg');
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(filtered_Img3), title('Box Filtering', "fontsize", FS);
+saveas(3, 'Box Filtering.png');
 
 
 
 ================================================
-FILE: S5_19052025/Ex5_2.m
+FILE: S5/Ex5_2.m
 ================================================
-% Subsampling an image
+%Ex5_2 Subsampling an image
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image;
-img = im2double(imread('bike.png'));
+%load test image
+Img = im2double(imread('bike.png'));
 
-% perform subsampling by a matrix multiplication
-[row,col] = size(img);
+%perform subsampling by a matrix multiplication
+[row,col] = size(Img);
 a = eye(row / 2);
-b = [1;0];
-c = [0.5;0.5];
-h1 = kron(a, b);
-h2 = kron(a, c);
+b = [1; 0];
+c = [0.5; 0.5];
+h1 = kron(a,b);
+h2 = kron(a,c);
+%375x750 750x1124
+sub_Img1 = h1' * Img * h1; %h1' is the transpose matrix of h1
+sub_Img2 = h2' * Img * h2;
 
-%perfrom convolving on the image
-sub_img1 = h1' * img * h1;
-sub_img2 = h2' * img * h2;
-
-%show image
-FS = 15;
-figure(1), clf;
-
-subplot(1,3,1), imshow(img), title('Origin image', "fontsize", FS);
-subplot(1,3,2), imshow(sub_img1), title('Method 1', "fontsize", FS);
-subplot(1,3,3), imshow(sub_img2), title('Method 2', "fontsize", FS);
-saveas(1, 'Subsampling filtering.jpg');
+%show images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(1,3,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,3,2), imshow(sub_Img1), title('Method 1', "fontsize", FS);
+subplot(1,3,3), imshow(sub_Img2), title('Method 2', "fontsize", FS);
+saveas(gcf, 'Subsampling 2:1 in Different Methods.jpg');
 
 
 
 ================================================
-FILE: S5_19052025/Ex5_3.m
+FILE: S5/Ex5_3.m
 ================================================
-% noise mean filtering
+%Ex5_3 Noise Mean Filtering
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image;
-img = imread('coins.tif');
+%load test image
+Img = imread('coins.tif');
 
-img_noise = imnoise(img, "Gaussian", 0, 0.05);
+%add Gaussian noise to the original image
+Img_noise = imnoise(Img, 'Gaussian', 0, 0.05);
 
-%show image
-FS = 15;
+%show images
+FS = 15; %fontsize of caption
 figure(1), clf;
-
-subplot(1,2,1), imshow(img), title('Origin image', "fontsize", FS);
-subplot(1,2,2), imshow(img_noise), title('Noise filter image', "fontsize", FS);
-saveas(1, 'Noise filter image.jpg');
-
-% apply an averaing filter using two different kernel sizes
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(Img_noise), title('Noisy Image', "fontsize", FS);
+saveas(1, 'Original vs. Noisy Image.jpg');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%apply an averaging filter using two different kernel sizes
 %a. default kernel 3x3
-f1 = fspecial('average');
-img_noise1 = imfilter(img_noise, f1);
+f1 = fspecial('average'); %default size = 3x3
+Img_denoise1 = imfilter(Img_noise, f1);
 
-%b. default kernel 5x5
+%b. a defined kernel 5x5
 f2 = fspecial('average', [5 5]);
-img_noise2 = imfilter(img_noise, f2);
+Img_denoise2 = imfilter(Img_noise, f2);
 
-%show image
-FS = 15;
+%show images
 figure(2), clf;
-
-subplot(1,2,1), imshow(img_noise1), title('Image noise 3x3', "fontsize", FS);
-subplot(1,2,2), imshow(img_noise2), title('Image noise 5x5', "fontsize", FS);
-saveas(2, 'Noise filter image with different kernel size.jpg');
-
-
-
-
+subplot(1,2,1), imshow(Img_denoise1), title('Denoise with 3x3 kernel', "fontsize", FS);
+subplot(1,2,2), imshow(Img_denoise2), title('Denoise with 5x5 kernel', "fontsize", FS);
+saveas(2, 'Filtered Image with Different Kernel Sizes.jpg');
 
 
 
 ================================================
-FILE: S5_19052025/Ex5_4.m
+FILE: S5/Ex5_4.m
+================================================
+%Ex5_4 Noise Salt/Pepper Filtering
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = im2double(imread('coins.tif'));
+Img_salt = im2double(imread('coins_salt.jpg'));
+Img_pepper = im2double(imread('coins_pepper.jpg'));
+
+%show images
+FS = 15; %fontsize of caption
+figure(1), clf;
+subplot(1,3,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,3,2),  imshow(Img_salt), title('Salt Noise Image', "fontsize", FS);
+subplot(1,3,3),  imshow(Img_pepper), title('Pepper Noise Image', "fontsize", FS);
+saveas(1, 'Original and Noisy Images.jpg');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%filter noisy images
+Img_fix1 = colfilt(Img_salt, [4 4], 'sliding', @min);
+Img_fix2 = colfilt(Img_pepper, [4 4], 'sliding', @max);
+Img_fix3 = colfilt(Img_salt, [4 4], 'sliding', @max);
+Img_fix4 = colfilt(Img_pepper, [4 4], 'sliding', @min);
+
+figure(2), clf;
+subplot(2,2,1), imshow(Img_fix1), title('Salt Denoise Image', "fontsize", FS);
+subplot(2,2,2), imshow(Img_fix2), title('Pepper Denoise Image', "fontsize", FS);
+subplot(2,2,3), imshow(Img_fix3), title('Salt Wrongly Denoise Image', "fontsize", FS);
+subplot(2,2,4), imshow(Img_fix4), title('Peppe Wrongly Denoise Image', "fontsize", FS);
+saveas(2, 'Denoise Images.jpg');
+
+
+
+================================================
+FILE: S5/Ex5_5.m
 ================================================
 %Ex5_5 Noise Low-Pass Filter (LPF)
 clear, clc, close all;
@@ -1073,90 +985,35 @@ saveas(2, 'Original vs. Filtered Images.jpg');
 
 
 ================================================
-FILE: S5_19052025/Ex5_5.m
+FILE: S6/Ex6_1.m
 ================================================
-% Noise low pass filter (LPF)
+%Ex6_1 Image Sharpening
 clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load image;
-img = imread('airplane.png');
-
-%contruct three different filters
-[wx, wy] = meshgrid(-pi : p/8 : pi : -pi : p/8 : pi);
-
-%compute frequency responses
-type = '1d_horizontal';
-%type = '1d_vertical';
-%type = '2d';
-
-if strcmp(type, '2d') == 1
-  %filter frequency domain
-  a = (1/256) * (1 + 2*cos(wx) + 2*cos(2*wx)) .* (1 + 2 cos(wx) + 2*cos(2*wx));
-  b = (1/256) * ones(16);
-
-else if strcmp(type, '1d_horizontal') == 1
-  a = (1/16) * (1 + 2*cos(wx) + 2*cos(2*wx));
-  b = (1/16) * ones(1, 16);
-
-  elseif strcmp(type, '1d_vertical') == 1
-  a = (1/16) * (1 + 2*cos(wx) + 2*cos(2*wx));
-  b = (1/16) * ones(16, 1);
-
-end
-
-figure(1), clf;
-surf(wx/pi, wy/pi, abs(H)); axis([-1 1 -1 1 0 1]);
-set (gca 'XTick', -1 : 0.5 : 1, 'YTick', -1 : 0.5 : 1);
-xlabel('\omega_x / \pi'); ylabel('\omega_y / \pi');
-zlabel('H|');
-
-%show image
-FS = 15;
-figure(1), clf;
-
-subplot(1,3,1), imshow(img), title('Original Image', "fontsize", FS);
-subplot(1,3,2), imshow(img_salt), title('Salt Image', "fontsize", FS);
-subplot(1,3,3), imshow(img_pepper), title('Pepper Image', "fontsize", FS);
-saveas(1, 'Noise low pass filter (LPF).jpg');
-
-
-
-
-
-
-
-================================================
-FILE: S6_21052025/Ex6_1.m
-================================================
-% Image Sharpening
-clear, clc, close all;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-pkg load image;
-%img = im2double(imread('duck.png'));
-img = im2double(imread('street.jfif'));
+%load test image
+%Img = im2double(imread('duck.png'));
+Img = im2double(imread('street.jfif'));
 
 %apply two sharpening filters 3x3 to the degraded image
 h1 = [0 -1 0; -1 10 -1; 0 -1 0] / 5;
 h2 = [0 -1 0; -1 5 -1; 0 -1 0];
 
-img_sharpened1 = imfilter(img, h1, "symmetric");
-img_sharpened2 = imfilter(img, h2, "replicate");
+Img_sharpened1 = imfilter(Img, h1, 'symmetric');
+Img_sharpened2 = imfilter(Img, h2, 'replicate');
 
-%plot image
-FS = 15
+%show images
+FS = 15; %fontsize of caption
 figure, clf;
-
-subplot(1, 3, 1), imshow(img), title('Origin Img', "fontsize", FS);
-subplot(1, 3, 2), imshow(img_sharpened1), title('Sharpening 1', "fontsize", FS);
-subplot(1, 3, 3), imshow(img_sharpened2), title('Sharpening 2', "fontsize", FS);
-
-saveas(gcf, "Sharpening Image");
-
+subplot(1,3,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,3,2), imshow(Img_sharpened1), title('Sharpening 1', "fontsize", FS);
+subplot(1,3,3), imshow(Img_sharpened2), title('Sharpening 2', "fontsize", FS);
+saveas(gcf, 'Sharpening Images.jpg');
 
 
 
 ================================================
-FILE: S6_21052025/Ex6_2.m
+FILE: S6/Ex6_2a.m
 ================================================
 %Ex6_2a Butterworth Noise Reduction and Deblurring
 clear, clc, close all;
@@ -1200,5 +1057,634 @@ saveas(2, 'Denoise Deblurring Image using Butterworth.jpg');
 %compare Mean Square Error (mse) between the denoise deblur image and original image
 mse2 = 255 * (filtered_Img - Img);
 fprintf("Mean Square Error after restoration: %.2f\n", rms(mse2(:)));
+
+
+
+================================================
+FILE: S7/Ex7_1.m
+================================================
+%Ex7_1 Dilation
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = imread('binary_objects.jpg');
+
+%perform dilation with some different structuring elements (SEs)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%a. small disk with radius = 5
+se1 = strel('disk', 5, 0);
+BW1 = imdilate(Img, se1);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%b. large disk with radius = 15
+se2 = strel('disk', 15, 0);
+BW2 = imdilate(Img, se2);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%c. square with side = 7
+se3 = strel('square', 7);
+BW3 = imdilate(Img, se3);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%d. rectangle with dimensions = [5 10]
+se4 = strel('rectangle', [5 10]);
+BW4 = imdilate(Img, se4);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%e. diamond with radius = 4
+se5 = strel('diamond', 4);
+BW5 = imdilate(Img, se5);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%f. line with length = 10 and inclided angle = 45
+se6 = strel('line', 10, 45);
+BW6 = imdilate(Img, se6);
+
+%plot images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(2,3,1), imshow(BW1), title('Small Disk', "fontsize", FS);
+subplot(2,3,2), imshow(BW2), title('Large Disk', "fontsize", FS);
+subplot(2,3,3), imshow(BW3), title('Square', "fontsize", FS);
+subplot(2,3,4), imshow(BW4), title('Rectangle', "fontsize", FS);
+subplot(2,3,5), imshow(BW5), title('Diamond', "fontsize", FS);
+subplot(2,3,6), imshow(BW6), title('Line', "fontsize", FS);
+saveas(gcf, 'Dilation with Different SEs.jpg');
+
+
+
+================================================
+FILE: S7/Ex7_2.m
+================================================
+%Ex7_2 Erosion
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = imread('binary_objects.jpg');
+
+%perform erosion with some different structuring elements (SEs)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%a. small disk with radius = 5
+se1 = strel('disk', 5, 0);
+BW1 = imerode(Img, se1);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%b. large disk with radius = 15
+se2 = strel('disk', 15, 0);
+BW2 = imerode(Img, se2);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%c. square with side = 7
+se3 = strel('square', 7);
+BW3 = imerode(Img, se3);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%d. rectangle with dimensions = [5 10]
+se4 = strel('rectangle', [5 10]);
+BW4 = imerode(Img, se4);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%e. diamond with radius = 4
+se5 = strel('diamond', 4);
+BW5 = imerode(Img, se5);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%f. line with length = 10 and inclided angle = 45
+se6 = strel('line', 10, 45);
+BW6 = imerode(Img, se6);
+
+%plot images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(2,3,1), imshow(BW1), title('Small Disk', "fontsize", FS);
+subplot(2,3,2), imshow(BW2), title('Large Disk', "fontsize", FS);
+subplot(2,3,3), imshow(BW3), title('Square', "fontsize", FS);
+subplot(2,3,4), imshow(BW4), title('Rectangle', "fontsize", FS);
+subplot(2,3,5), imshow(BW5), title('Diamond', "fontsize", FS);
+subplot(2,3,6), imshow(BW6), title('Line', "fontsize", FS);
+saveas(gcf, 'Erosion with Different SEs.jpg');
+
+
+
+================================================
+FILE: S7/Ex7_3.m
+================================================
+%Ex7_3 Circle Counting using Erosion
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = imread('circles.png');
+
+%perform erosion with some different structuring elements (SEs)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%a. small disk with radius = 50
+se1 = strel('disk', 50, 0);
+BW1 = imerode(Img, se1);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%b. square with side = 60
+se2 = strel('square', 60);
+BW2 = imerode(Img, se2);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%c. rectangle with dimensions = [38 48]
+se3 = strel('rectangle', [38 48]);
+BW3 = imerode(Img, se3);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%d. diamond with radius = 50
+se4 = strel('diamond', 50);
+BW4 = imerode(Img, se4);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%e. line with length = 30 and inclided angle = 45
+se5 = strel('line', 30, 45);
+BW5 = imerode(Img, se5);
+
+%plot images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(2,3,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(2,3,2), imshow(BW1), title('Disk', "fontsize", FS);
+subplot(2,3,3), imshow(BW2), title('Square', "fontsize", FS);
+subplot(2,3,4), imshow(BW3), title('Rectangle', "fontsize", FS);
+subplot(2,3,5), imshow(BW4), title('Diamond', "fontsize", FS);
+subplot(2,3,6), imshow(BW5), title('Line', "fontsize", FS);
+saveas(gcf, 'Circle Counting using Erosion.jpg');
+
+
+
+================================================
+FILE: S7/Ex7_4.m
+================================================
+%Ex7_4 Hole Detection using Erosion
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = imread('fence.jpg');
+
+Img_gray = rgb2gray(Img); %convert from rgb to grayscale image
+level = graythresh(Img_gray);
+BW = im2bw(Img_gray, level);
+
+%a. perform the erosion with a diamond with radius = 35
+se1 = strel('diamond', 35);
+BW1 = imerode(BW, se1);
+
+%b. perform the erosion with a defined cross structuring element
+length = 101; %50 pixels each size
+NHOOD = zeros(length);
+NHOOD(ceil(length/2), :) = 1;
+NHOOD(:, ceil(length/2)) = 1;
+se2 = strel('arbitrary', NHOOD);
+BW2 = imerode(BW, se2);
+
+%plot images
+FS = 15; %fontsize of caption
+figure(1), clf;
+imshow(NHOOD), title('50-pixel Cross SE', "fontsize", FS);
+saveas(1, 'Cross Structuring Element.jpg');
+
+figure(2), clf;
+subplot(2,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(2,2,2), imshow(BW), title('Binary Image', "fontsize", FS);
+subplot(2,2,3), imshow(BW1), title('Erosion w. Diamond', "fontsize", FS);
+subplot(2,2,4), imshow(BW2), title('Erosion w. Cross', "fontsize", FS);
+saveas(2, 'Hole Detection with Erosion.jpg');
+
+
+
+================================================
+FILE: S7/Ex7_5.m
+================================================
+%Ex7_5 Small Hole Removal using Closing
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = imread('man_face.png');
+
+%binarize the input image
+BW = Img < 112; %manual threshold
+
+%perform closing
+se = strel('square', 22);
+Img_dilated = imdilate(BW, se); %dilation first
+Img_closed = imerode(Img_dilated, se); %erosion then
+Img_diff = Img_closed - BW;
+
+%show images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(2,2,1), imshow(BW), title('Binary Image', "fontsize", FS);
+subplot(2,2,2), imshow(Img_dilated), title('Dilated Image', "fontsize", FS);
+subplot(2,2,3), imshow(Img_closed), title('Closed Image', "fontsize", FS);
+subplot(2,2,4), imshow(Img_diff), title('Closing - Binary', "fontsize", FS);
+saveas(gcf, 'Hole Removal using Closing.jpg');
+
+
+
+================================================
+FILE: S7/Ex7_6.m
+================================================
+%Ex7_6 Boundary Detection using Dilation and Erosion
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = im2double(imread('cliparts.png'));
+
+%perform dilation and erosion
+se = strel('disk', 5, 0);
+Img_dilated = imdilate(Img, se);
+Img_eroded = imerode(Img, se);
+
+%extract boundary
+ext_edge = Img_dilated - Img;
+int_edge = Img - Img_eroded;
+edge = Img_dilated - Img_eroded;
+
+%show images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(2,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(2,2,2), imshow(ext_edge), title('Edge\_1 = External', "fontsize", FS);
+subplot(2,2,3), imshow(int_edge), title('Edge\_2 = Internal', "fontsize", FS);
+subplot(2,2,4), imshow(edge), title('Edge\_3 = External + Internal', "fontsize", FS);
+saveas(gcf, 'Boundary Detection using Dilation and Erosion.jpg');
+
+
+
+================================================
+FILE: S8/Ex8_1.m
+================================================
+%Ex8_1 Edge Detection: Sobel Operator
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = double(imread('bike.png'));
+%Img = double(imread('man_face.png'));
+
+h = fspecial('sobel');
+%apply Sobel operator in horizontal direction
+filtered_Img1 = imfilter(Img, h, 'symmetric');
+filtered_Img1 = abs(filtered_Img1); %gets its magnitude
+filtered_Img1 = filtered_Img1 / max(filtered_Img1(:)); %normalize it
+
+%apply Sobel operator in vertical direction
+filtered_Img2 = imfilter(Img, h', 'symmetric'); %h': transpose of h
+filtered_Img2 = abs(filtered_Img2); %gets its magnitude
+filtered_Img2 = filtered_Img2 / max(filtered_Img2(:)); %normalize it
+
+%apply Sobel operator in both directions
+filtered_Img3 = filtered_Img1 .^2 + filtered_Img2 .^ 2;
+log_filtered_Img3 = log(filtered_Img3 + 1); %gets its magnitude in logarithmic
+log_filtered_Img3 = log_filtered_Img3 / max(log_filtered_Img3(:)); %normalize it
+
+bw_edge1 = log_filtered_Img3 > 0.01; %threshold = 1%
+bw_edge2 = log_filtered_Img3 > 0.02; %threshold = 2%
+bw_edge3 = log_filtered_Img3 > 0.04; %threshold = 4%
+
+%plot images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(2,3,1), imshow(uint8(Img)), title('Original Image', "fontsize", FS);
+subplot(2,3,2), imshow(filtered_Img1), title('Sobel Horizontal', "fontsize", FS);
+subplot(2,3,3), imshow(filtered_Img2), title('Sobel Vertical', "fontsize", FS);
+
+subplot(2,3,4), imshow(bw_edge1), title('Mag > 0.01', "fontsize", FS);
+subplot(2,3,5), imshow(bw_edge2), title('Mag > 0.02', "fontsize", FS);
+subplot(2,3,6), imshow(bw_edge3), title('Mag > 0.04', "fontsize", FS);
+saveas(gcf, 'Sobel Operator.jpg');
+
+
+
+================================================
+FILE: S8/Ex8_2.m
+================================================
+%Ex8_2 Edge Detection: Prewitt Operator
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+%Img = double(imread('bike.png'));
+Img = double(imread('man_face.png'));
+
+h = fspecial('prewitt');
+%apply Prewitt operator in horizontal direction
+filtered_Img1 = imfilter(Img, h, 'replicate');
+filtered_Img1 = abs(filtered_Img1); %gets its magnitude
+filtered_Img1 = filtered_Img1 / max(filtered_Img1(:)); %normalize it
+
+%apply Prewitt operator in vertical direction
+filtered_Img2 = imfilter(Img, h', 'replicate'); %h': transpose of h
+filtered_Img2 = abs(filtered_Img2); %gets its magnitude
+filtered_Img2 = filtered_Img2 / max(filtered_Img2(:)); %normalize it
+
+%apply Prewitt operator in both directions
+filtered_Img3 = filtered_Img1 .^2 + filtered_Img2 .^ 2;
+log_filtered_Img3 = log(filtered_Img3 + 1); %gets its magnitude in logarithmic
+log_filtered_Img3 = log_filtered_Img3 / max(log_filtered_Img3(:)); %normalize it
+
+bw_edge1 = log_filtered_Img3 > 0.01; %threshold = 1%
+bw_edge2 = log_filtered_Img3 > 0.02; %threshold = 2%
+bw_edge3 = log_filtered_Img3 > 0.04; %threshold = 4%
+
+%plot images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(2,3,1), imshow(uint8(Img)), title('Original Image', "fontsize", FS);
+subplot(2,3,2), imshow(filtered_Img1), title('Prewitt Horizontal', "fontsize", FS);
+subplot(2,3,3), imshow(filtered_Img2), title('Prewitt Vertical', "fontsize", FS);
+
+subplot(2,3,4), imshow(bw_edge1), title('Mag > 0.01', "fontsize", FS);
+subplot(2,3,5), imshow(bw_edge2), title('Mag > 0.02', "fontsize", FS);
+subplot(2,3,6), imshow(bw_edge3), title('Mag > 0.04', "fontsize", FS);
+saveas(gcf, 'Prewitt Operator.jpg');
+
+
+
+================================================
+FILE: S8/Ex8_3.m
+================================================
+%Ex8_3 Canny Edge Detector
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = imread('bike.png');
+
+%repeat with different 'Standard Deviation' (sigma) of Gaussian
+sigmaValues = [sqrt(2), 2*sqrt(2), 4*sqrt(2)];
+threshold = 0.2; %threshold value = 20%
+
+%perform Canny edge detection and show images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(2,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+for i = 1 : numel(sigmaValues)
+  %compute and show Canny edges
+  sigma = sigmaValues(i);
+  bw = edge(Img, 'canny', threshold, sigma);
+  subplot(2,2,i+1), imshow(bw);
+  title(sprintf('sigma = %.2f', sigma));
+end
+saveas(gcf, 'Canny Edge Detector.jpg');
+
+
+
+================================================
+FILE: S8/Ex8_4.m
+================================================
+%Ex8_4 Hough Transform
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+%Img = imread('dots.png');
+%Img = imread('dashline.png');
+Img = imread('line.png');
+
+%show images
+FS = 15; %fontsize of caption
+figure, clf;
+imshow(Img), title('Original Image', "fontsize", FS);
+
+[H, theta, rho] = hough(Img, 'Theta', -90 : 1 : 90, 'RhoResolution', 1);
+%show Hough Transform in 2-D plane
+h = figure; imagesc(theta, rho, H);
+axis on, axis normal, hold on;
+colormap(hot), colorbar;
+xlabel('\theta', "fontsize", FS); ylabel('\rho', "fontsize", FS);
+set(gca, "fontsize", FS);
+print(h, 'Hough Transform in 2-D.png');
+
+
+
+================================================
+FILE: S8/Ex8_5.m
+================================================
+%Ex8_5 Hough Transform Application
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = imread('paper.jpg');
+
+%binarize the input image
+level = graythresh(Img);
+bw_Img = 1 - im2bw(Img, level);
+
+%show images
+FS = 15; %fontsize of caption
+figure(1), clf;
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(bw_Img), title('Binary Image', "fontsize", FS);
+saveas(1, 'Origin vs. Binary Images.png');
+
+%compute Hough Transform
+[H, theta, rho] = hough(bw_Img, 'Theta', -90 : 1 : 90, 'RhoResolution', 1);
+figure(2), clf;
+imagesc(theta, rho, H); axis on, axis normal, hold on;
+colormap(hot), colorbar;
+set(gca, "fontsize", FS);
+saveas(2, 'Hough Transform Computation.png');
+
+%detect peaks in Hough Transform
+peakNum = 8;
+P = houghpeaks(H, peakNum, 'threshold', ceil(0.2*max(H(:))));
+lines = houghlines(bw_Img, theta, rho, P, 'FillGap', 5, 'MinLength', 1);
+thetaPeaks = theta(P(:,2)); rhoPeaks = rho(P(:,1));
+plot(thetaPeaks, rhoPeaks, 'o', 'color', 'Y', 'LineWidth', 1.5);
+
+%rotate by the orientation of the average line (mean of 8 lines)
+angle = median(thetaPeaks);
+deskewed_Img = imrotate(Img, 90 + angle, 'bicubic', 'crop');
+figure(3), clf;
+imshow(deskewed_Img), title('Deskewed Image', "fontsize", FS);
+saveas(3, 'Deskewed Paper using Hough Transform.jpg');
+
+
+
+
+================================================
+FILE: S8/Ex8_6.m
+================================================
+%Ex8_6 Hough Transform Application
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = imread('coins.png');
+
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(1,3,1), imshow(Img), title('Original Image', "fontsize", FS);
+
+%extract edges using Prewitt Operator
+bw = edge(Img, 'prewitt', 0.15);
+subplot(1,3,2), imshow(bw), title('Edge Detection by Prewitt', "fontsize", FS);
+
+%find edges using Hough Transform
+[centers, radii, metric] = imfindcircles(bw, [40 200], 'Sensitivity', 0.9);
+subplot(1,3,3), imshow(Img), title('Edge Detection by HT', "fontsize", FS);
+hold on; plot(centers(:,1), centers(:,2), 'xr', 'MarkerSize', 2, 'LineWidth', 0.5);
+viscircles(centers, radii, 'EdgeColor', 'y', 'LineWidth', 0.25);
+saveas(gcf, 'Coin Center Findings using HT.jpg');
+
+
+
+================================================
+FILE: S9/Ex9_1.m
+================================================
+%Ex9_1 Coins Counting using Dilation
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = imread('coins.png');
+
+%binarize the input image
+level = graythresh(Img);
+BW = 1 - im2bw(Img, level); %im2bw: coins=black, bg=white
+
+%a. no dilation
+[L1, obj1] = bwlabel(BW, 6);
+rgbLabel1 = label2rgb(L1, 'jet', 'k');
+printf("Number of coins before dilation: %d\n", obj1);
+
+%use dilation
+se = strel('disk', 25, 0);
+BW_dilated = 1 - imdilate(im2bw(Img,level), se);
+
+[L2, obj2] = bwlabel(BW_dilated, 6);
+rgbLabel2 = label2rgb(L2, 'jet', 'k');
+printf("Number of coins before dilation: %d\n", obj2);
+
+%show images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(2,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(2,2,2), imshow(BW), title('Binary Image', "fontsize", FS);
+subplot(2,2,3), imshow(rgbLabel1), title('Labelling w.o. Dilation', "fontsize", FS);
+subplot(2,2,4), imshow(rgbLabel2), title('Labelling w. Dilation', "fontsize", FS);
+
+saveas(gcf, 'Coins Counting using Dilation.jpg');
+
+
+
+================================================
+FILE: S9/Ex9_2.m
+================================================
+%Ex9_2 Ants Counting
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = imread('ants.jpg');
+
+%binarize the input image
+level = graythresh(Img);
+BW = 1 - im2bw(Img, level);
+
+%region labelling
+[L, ants] = bwlabel(BW, 6);
+rgblabel = label2rgb(L, 'jet', 'k');
+printf("Number of ants: %d\n", ants);
+
+%ignore small regions
+suspended_regions = L > 1;
+minSize = 6; %minimum size of pixels to be considered as an ant
+ants = regionprops(suspended_regions, 'Area', 'Centroid', 'PixelIdxList');
+%remove all regions with the size below minimum
+ants(vertcat(ants.Area) < minSize) = [];
+
+%plot image with ants counting and labelling
+FS = 15; %fontsize of caption
+figure(1), clf;
+subplot(1,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(1,2,2), imshow(BW), title('Binary Image', "fontsize", FS);
+saveas(1, 'Origin vs. Binary Images.jpg');
+
+figure(2), clf;
+imshow(rgblabel); title('Labelled Ants', "fontsize", FS);
+for k = 1 : numel(ants)
+  text(ants(k).Centroid(1), ants(k).Centroid(2), num2str(k), ...
+    'Color', 'w', 'HorizontalAlignment', 'center');
+end
+saveas(2, 'Ants Counting.jpg');
+
+
+
+================================================
+FILE: S9/Ex9_3.m
+================================================
+%Ex9_3 Change obhects' color using Segmentation
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test image
+Img = imread('shapes.png');
+
+%convert the input image to grayscale
+Img_grayscale = rgb2gray(Img);
+%binarize the input image
+level = graythresh(Img_grayscale);
+Img_BW = 1 - im2bw(Img_grayscale, level);
+
+%change objects' color
+[L, obj] = bwlabel(Img_BW, 6);
+%1. circle: dark gray; 2. square: black;
+%3. rectangle: orange; 4. asterisk: cyan; 5. pentagon: yellow
+cmap = [128 128 128; 0 0 0; 255 165 0; 0 255 255; 255 255 0] / 255; %RGB
+rgblabel = label2rgb(L, cmap);
+
+%show images
+FS = 15; %fontsize of caption
+figure, clf;
+subplot(2,2,1), imshow(Img), title('Original Image', "fontsize", FS);
+subplot(2,2,2), imshow(Img_grayscale), title('Grayscale Image', "fontsize", FS);
+subplot(2,2,3), imshow(Img_BW), title('Binary Image', "fontsize", FS);
+subplot(2,2,4), imshow(rgblabel), title('Converted Color Image', "fontsize", FS);
+saveas(gcf, 'Converted Color Image.jpg');
+
+
+
+================================================
+FILE: S9/Ex9_4.m
+================================================
+%Ex9_4 Template Matching
+clear, clc, close all;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pkg load image;
+%load test images
+church = double(imread('church.png'));
+window = double(imread('window.png'));
+
+%plot images
+FS = 15; %fontsize of caption
+figure(1), clf;
+subplot(1,2,1), imshow(uint8(church)), title('Orignal Church', "fontsize", FS);
+subplot(1,2,2), imshow(uint8(window)), title('Orignal Window', "fontsize", FS);
+
+%subtract means
+church = church - mean(church(:));
+window = window - mean(window(:));
+figure(2), clf;
+subplot(1,2,1), imshow(uint8(church)), title('Church - MeanC', "fontsize", FS);
+subplot(1,2,2), imshow(uint8(window)), title('Window - MeanW', "fontsize", FS);
+
+%perform template matching
+flipped_window = fliplr(flipud(window));
+r = conv2(church, flipped_window, 'same');
+figure(3), clf;
+imagesc(r), colorbar('north');
+axis off, axis equal;
+
 
 
