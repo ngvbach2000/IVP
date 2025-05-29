@@ -1,1 +1,1 @@
-*.zip, *.txt, mid_test/, *.jfif, *.tif, *.ofig
+*.zip, *.txt, self/, *.jfif, *.tif, *.ofig
